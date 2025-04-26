@@ -1,5 +1,5 @@
 import type { User, Product, Order, CartItem } from './base';
-import type { LoginResponse, AuthCheckResponse, TokenVerifyResponse, ProfileResponse, GoogleAuthResponse } from './auth';
+import type { LoginResponse, AuthCheckResponse, TokenVerifyResponse, ProfileResponse, GoogleAuthResponse, EmptyResponse } from './auth';
 
 export type ApiResponseData = 
     | User 
@@ -15,6 +15,7 @@ export type ApiResponseData =
     | TokenVerifyResponse['data']
     | ProfileResponse['data']
     | GoogleAuthResponse['data']
+    | EmptyResponse['data']
     | { url: string }
     | null
     | undefined;

@@ -3,8 +3,8 @@ import CartItem from './CartItem';
 
 interface CartListProps {
   items: CartItemType[];
-  onUpdateQuantity: (productId: string, quantity: number) => void;
-  onRemoveItem: (productId: string) => void;
+  onUpdateQuantity: (itemId: string, quantity: number) => void;
+  onRemoveItem: (itemId: string) => void;
 }
 
 export default function CartList({ items, onUpdateQuantity, onRemoveItem }: CartListProps) {
@@ -20,7 +20,7 @@ export default function CartList({ items, onUpdateQuantity, onRemoveItem }: Cart
     <div className="space-y-4">
       {items.map((item) => (
         <CartItem
-          key={item.product._id}
+          key={item._id}
           item={item}
           onUpdateQuantity={onUpdateQuantity}
           onRemoveItem={onRemoveItem}

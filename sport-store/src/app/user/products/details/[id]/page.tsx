@@ -14,7 +14,7 @@ import ProductActions from '@/components/user/productDetail/ProductActions';
 import ProductBenefits from '@/components/user/productDetail/ProductBenefits';
 import ProductDescription from '@/components/user/productDetail/ProductDescription';
 import { checkAuth } from '@/services/authService';
-import apiClient from '@/lib/api';
+import { cartService } from '@/services/cartService';
 
 interface Product {
   _id: string;
@@ -40,6 +40,14 @@ interface Product {
   discountPercentage: number;
   isOutOfStock: boolean;
   isLowStock: boolean;
+  price: number;
+  images: string[];
+  category: string;
+  variants: Array<{
+    color: string;
+    size: string;
+    stock: number;
+  }>;
 }
 
 export default function ProductDetail() {
@@ -114,42 +122,53 @@ export default function ProductDetail() {
   };
 
   const handleAddToCart = async () => {
-    if (!product || !selectedColor || !selectedSize) {
-      toast.error("Vui lòng chọn màu sắc và kích thước");
-      return;
-    }
-
     try {
-      // Kiểm tra đăng nhập
-      const authResponse = await checkAuth();
-      if (!authResponse.success || !authResponse.data?.user) {
-        toast.error("Vui lòng đăng nhập để thêm vào giỏ hàng");
-        router.push('/auth/login');
+      console.log('🛒 Bắt đầu thêm vào giỏ hàng');
+      
+      if (!selectedColor || !selectedSize) {
+        console.log('❌ Chưa chọn màu hoặc kích thước');
+        toast.error('Vui lòng chọn màu và kích thước sản phẩm');
         return;
       }
 
-      // Thêm vào giỏ hàng
-      const response = await apiClient.cart.addToCart({
+      if (!product) {
+        console.log('❌ Không tìm thấy thông tin sản phẩm');
+        toast.error('Không tìm thấy thông tin sản phẩm');
+        return;
+      }
+
+      // Kiểm tra số lượng tồn kho
+      if (product.stock < quantity) {
+        console.log('❌ Số lượng tồn kho không đủ');
+        toast.error(`Chỉ còn ${product.stock} sản phẩm trong kho`);
+        return;
+      }
+
+      console.log('📤 Gọi API thêm vào giỏ hàng');
+      const response = await cartService.addToCart({
         sku: product.sku,
         color: selectedColor,
         size: selectedSize,
-        quantity: quantity
+        quantity
       });
-      
-      if (response.data.success) {
-        toast.success("Đã thêm vào giỏ hàng");
+
+      console.log('📥 Kết quả API:', response);
+
+      if (response.success) {
+        console.log('✅ Thêm vào giỏ hàng thành công');
+        toast.success('Đã thêm sản phẩm vào giỏ hàng');
+        router.push('/user/cart');
       } else {
-        toast.error(response.data.message || "Không thể thêm vào giỏ hàng");
+        console.log('❌ Thêm vào giỏ hàng thất bại:', response.message);
+        toast.error(response.message || 'Không thể thêm sản phẩm vào giỏ hàng');
       }
     } catch (error) {
-      console.error("Lỗi khi thêm vào giỏ hàng:", error);
-      // Kiểm tra nếu lỗi là do token không hợp lệ
-      if (error instanceof Error && error.message.includes("No token found")) {
-        toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
-        router.push('/auth/login');
-        return;
+      console.error('❌ Lỗi khi thêm vào giỏ hàng:', error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng');
       }
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng");
     }
   };
 
@@ -164,34 +183,37 @@ export default function ProductDetail() {
       const authResponse = await checkAuth();
       if (!authResponse.success || !authResponse.data?.user) {
         toast.error("Vui lòng đăng nhập để mua hàng");
-        router.push('/auth/login');
+        router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
         return;
       }
 
       // Thêm vào giỏ hàng
-      const response = await apiClient.cart.addToCart({
+      const response = await cartService.addToCart({
         sku: product.sku,
         color: selectedColor,
         size: selectedSize,
         quantity: quantity
       });
       
-      if (response.data.success) {
+      if (response.success) {
         toast.success("Đã thêm sản phẩm vào giỏ hàng!");
         // Chuyển hướng đến trang giỏ hàng
         router.push('/user/cart');
       } else {
-        toast.error(response.data.message || "Có lỗi xảy ra khi thêm vào giỏ hàng!");
+        toast.error(response.message || "Có lỗi xảy ra khi thêm vào giỏ hàng!");
       }
     } catch (error) {
       console.error("Lỗi khi thêm vào giỏ hàng:", error);
-      // Kiểm tra nếu lỗi là do token không hợp lệ
-      if (error instanceof Error && error.message.includes("No token found")) {
-        toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
-        router.push('/auth/login');
-        return;
+      if (error instanceof Error) {
+        if (error.message.includes("No token found")) {
+          toast.error("Phiên đăng nhập đã hết hạn, vui lòng đăng nhập lại");
+          router.push('/auth/login?redirect=' + encodeURIComponent(window.location.pathname));
+          return;
+        }
+        toast.error(error.message);
+      } else {
+        toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng!");
       }
-      toast.error("Có lỗi xảy ra khi thêm vào giỏ hàng!");
     }
   };
 

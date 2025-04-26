@@ -1,20 +1,27 @@
 export interface Product {
-  _id: string;
+  sku: string;
   name: string;
-  price: number;
-  image: string;
-  quantity: number;
-  stock: number;
+  slug: string;
+  brand: string;
+  mainImage: string;
+  salePrice: number;
 }
 
 export interface CartItem {
   product: Product;
   quantity: number;
+  color: string;
+  size: string;
+  totalPrice: number;
+  _id: string;
 }
 
 export interface CartState {
   items: CartItem[];
-  total: number;
+  totalQuantity: number;
+  cartTotal: number;
   loading: boolean;
   error: string | null;
+  createdAt?: string;
+  updatedAt?: string;
 } 

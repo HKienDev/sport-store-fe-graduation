@@ -53,7 +53,7 @@ const axiosInstance = axios.create({
 let isRefreshing = false;
 let failedQueue: Array<{
     resolve: (value?: unknown) => void;
-    reject: (reason?: Error) => void;
+    reject: (reason?: unknown) => void;
 }> = [];
 
 // Rate limiting cho refresh token
@@ -100,10 +100,21 @@ axiosInstance.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config as CustomAxiosRequestConfig | undefined;
         
+        console.log('🔍 API Error:', {
+            status: error.response?.status,
+            url: originalRequest?.url,
+            method: originalRequest?.method,
+            isRetry: originalRequest?._retry
+        });
+        
         // Kiểm tra nếu lỗi 401 và chưa thử refresh
         if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+            console.log('🔄 Bắt đầu quá trình refresh token');
+            console.log('- isRefreshing:', isRefreshing);
+            console.log('- refreshAttempts:', refreshAttempts);
+            
             if (isRefreshing) {
-                // Nếu đang refresh, thêm request vào queue
+                console.log('⏳ Đang có refresh token đang xử lý, thêm request vào queue');
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 });
@@ -114,53 +125,74 @@ axiosInstance.interceptors.response.use(
             
             try {
                 // Kiểm tra xem có thể refresh không
-                if (!canRefresh()) {
-                    throw new Error('Too many refresh attempts');
+                const canRefreshResult = canRefresh();
+                console.log('✅ Có thể refresh token:', canRefreshResult);
+                
+                if (!canRefreshResult) {
+                    console.log('❌ Không thể refresh token, clear tokens và chuyển hướng');
+                    clearTokens();
+                    window.location.href = '/auth/login';
+                    return Promise.reject(error);
                 }
                 
                 refreshAttempts++;
+                console.log('🔢 Số lần thử refresh:', refreshAttempts);
                 
-                // Lấy refresh token
+                // Lấy refresh token từ localStorage
                 const refreshToken = getToken('refresh');
+                console.log('🎟️ Refresh token exists:', !!refreshToken);
+                
                 if (!refreshToken) {
-                    throw new Error('No refresh token');
+                    console.log('❌ Không tìm thấy refresh token, clear tokens và chuyển hướng');
+                    clearTokens();
+                    window.location.href = '/auth/login';
+                    return Promise.reject(error);
                 }
                 
                 // Gọi API refresh token
+                console.log('📤 Gọi API refresh token');
                 const response = await axiosInstance.post('/auth/refresh-token', { refreshToken });
+                console.log('📥 Kết quả refresh token:', response.data);
                 
-                if (response.data.success) {
+                if (response.data.success && response.data.data) {
                     const { accessToken, refreshToken: newRefreshToken } = response.data.data;
                     
-                    // Lưu token mới
+                    // Cập nhật tokens
                     setToken(accessToken, 'access');
                     setToken(newRefreshToken, 'refresh');
                     
-                    // Cập nhật header
-                    axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-                    
-                    // Reset số lần thử
+                    // Reset các biến kiểm soát
                     resetRefreshAttempts();
+                    isRefreshing = false;
                     
-                    // Thử lại request ban đầu
-                    if (originalRequest) {
-                        return axiosInstance(originalRequest);
-                    }
+                    // Thêm token mới vào header của request gốc
+                    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                    
+                    // Xử lý các request đang chờ
+                    failedQueue.forEach(({ resolve }) => {
+                        resolve();
+                    });
+                    failedQueue = [];
+                    
+                    // Thử lại request gốc
+                    return axiosInstance(originalRequest);
+                } else {
+                    throw new Error('Invalid refresh token response');
                 }
             } catch (refreshError) {
-                console.error('Refresh token error:', refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
+                console.error('❌ Lỗi khi refresh token:', refreshError);
                 
-                // Xóa token và chuyển hướng về trang login
+                // Clear tokens và chuyển hướng
                 clearTokens();
                 window.location.href = '/auth/login';
                 
-                // Reject tất cả request trong queue
+                // Reject tất cả các request đang chờ
                 failedQueue.forEach(({ reject }) => {
-                    reject(refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
+                    reject(refreshError);
                 });
                 failedQueue = [];
                 
-                throw refreshError;
+                return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;
             }
@@ -221,10 +253,21 @@ api.interceptors.response.use(
     async (error: AxiosError) => {
         const originalRequest = error.config as CustomAxiosRequestConfig | undefined;
         
-        // Nếu lỗi 401 và chưa thử refresh
+        console.log('🔍 API Error:', {
+            status: error.response?.status,
+            url: originalRequest?.url,
+            method: originalRequest?.method,
+            isRetry: originalRequest?._retry
+        });
+        
+        // Kiểm tra nếu lỗi 401 và chưa thử refresh
         if (error.response?.status === 401 && originalRequest && !originalRequest._retry) {
+            console.log('🔄 Bắt đầu quá trình refresh token');
+            console.log('- isRefreshing:', isRefreshing);
+            console.log('- refreshAttempts:', refreshAttempts);
+            
             if (isRefreshing) {
-                // Nếu đang refresh, thêm request vào queue
+                console.log('⏳ Đang có refresh token đang xử lý, thêm request vào queue');
                 return new Promise((resolve, reject) => {
                     failedQueue.push({ resolve, reject });
                 });
@@ -235,61 +278,74 @@ api.interceptors.response.use(
             
             try {
                 // Kiểm tra xem có thể refresh không
-                if (!canRefresh()) {
-                    throw new Error('Too many refresh attempts');
+                const canRefreshResult = canRefresh();
+                console.log('✅ Có thể refresh token:', canRefreshResult);
+                
+                if (!canRefreshResult) {
+                    console.log('❌ Không thể refresh token, clear tokens và chuyển hướng');
+                    clearTokens();
+                    window.location.href = '/auth/login';
+                    return Promise.reject(error);
                 }
                 
                 refreshAttempts++;
+                console.log('🔢 Số lần thử refresh:', refreshAttempts);
                 
                 // Lấy refresh token từ localStorage
-                const refreshToken = localStorage.getItem(TOKEN_CONFIG.REFRESH_TOKEN.STORAGE_KEY);
+                const refreshToken = getToken('refresh');
+                console.log('🎟️ Refresh token exists:', !!refreshToken);
+                
                 if (!refreshToken) {
-                    throw new Error('No refresh token');
+                    console.log('❌ Không tìm thấy refresh token, clear tokens và chuyển hướng');
+                    clearTokens();
+                    window.location.href = '/auth/login';
+                    return Promise.reject(error);
                 }
                 
                 // Gọi API refresh token
+                console.log('📤 Gọi API refresh token');
                 const response = await api.post('/auth/refresh-token', { refreshToken });
+                console.log('📥 Kết quả refresh token:', response.data);
                 
-                if (response.data.success) {
+                if (response.data.success && response.data.data) {
                     const { accessToken, refreshToken: newRefreshToken } = response.data.data;
                     
-                    // Lưu token mới
+                    // Cập nhật tokens
                     localStorage.setItem(TOKEN_CONFIG.ACCESS_TOKEN.STORAGE_KEY, accessToken);
                     localStorage.setItem(TOKEN_CONFIG.REFRESH_TOKEN.STORAGE_KEY, newRefreshToken);
                     
-                    // Cập nhật header
-                    api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-                    
-                    // Reset số lần thử
+                    // Reset các biến kiểm soát
                     resetRefreshAttempts();
+                    isRefreshing = false;
                     
-                    // Thử lại request ban đầu
-                    if (originalRequest) {
-                        return api(originalRequest);
-                    }
+                    // Thêm token mới vào header của request gốc
+                    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+                    
+                    // Xử lý các request đang chờ
+                    failedQueue.forEach(({ resolve }) => {
+                        resolve();
+                    });
+                    failedQueue = [];
+                    
+                    // Thử lại request gốc
+                    return api(originalRequest);
+                } else {
+                    throw new Error('Invalid refresh token response');
                 }
             } catch (refreshError) {
-                console.error('Refresh token error:', refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
+                console.error('❌ Lỗi khi refresh token:', refreshError);
                 
-                // Xóa token
-                localStorage.removeItem(TOKEN_CONFIG.ACCESS_TOKEN.STORAGE_KEY);
-                localStorage.removeItem(TOKEN_CONFIG.REFRESH_TOKEN.STORAGE_KEY);
-                localStorage.removeItem(TOKEN_CONFIG.USER.STORAGE_KEY);
+                // Clear tokens và chuyển hướng
+                clearTokens();
+                window.location.href = '/auth/login';
                 
-                // Xóa cookies
-                document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; Secure";
-                document.cookie = "refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; SameSite=Lax; Secure";
-                
-                // Xóa header
-                delete api.defaults.headers.common['Authorization'];
-                
-                // Reject tất cả request trong queue
+                // Reject tất cả các request đang chờ
                 failedQueue.forEach(({ reject }) => {
-                    reject(refreshError instanceof Error ? refreshError : new Error(String(refreshError)));
+                    reject(refreshError);
                 });
                 failedQueue = [];
                 
-                throw refreshError;
+                return Promise.reject(refreshError);
             } finally {
                 isRefreshing = false;
             }
@@ -516,17 +572,17 @@ const apiClient = {
         getCart: (): Promise<AxiosResponse<ApiResponse<CartItem[]>>> =>
             api.get(`/cart`),
         
-        addToCart: (data: { sku: string; color: string; size: string; quantity: number }): Promise<AxiosResponse<ApiResponse<CartItem[]>>> =>
-            api.post(`/cart/add`, data),
+        addToCart: (data: { sku: string; quantity: number; color?: string; size?: string }) =>
+            api.post<ApiResponse<CartItem[]>>('/cart/add', data),
         
-        updateCart: (productId: string, quantity: number): Promise<AxiosResponse<ApiResponse<CartItem[]>>> =>
-            api.put(`/cart/${productId}`, { quantity }),
+        updateCart: (data: { sku: string; quantity: number; color?: string; size?: string }) =>
+            api.put<ApiResponse<CartItem[]>>('/cart/update', data),
         
-        removeFromCart: (productId: string): Promise<AxiosResponse<ApiResponse<CartItem[]>>> =>
-            api.delete(`/cart/${productId}`),
+        removeFromCart: (data: { sku: string; color?: string; size?: string }) =>
+            api.post<ApiResponse<CartItem[]>>('/cart/remove', data),
         
-        clearCart: (): Promise<AxiosResponse<ApiResponse<CartItem[]>>> =>
-            api.delete(`/cart`)
+        clearCart: () =>
+            api.delete<ApiResponse<EmptyResponse['data']>>('/cart'),
     }
 };
 

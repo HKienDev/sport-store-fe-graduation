@@ -156,14 +156,19 @@ export default function OrderProducts() {
     }
 
     const cartItem: CartItem = {
-      productId: product._id,
-      sku: product.sku,
-      name: product.name,
-      price: product.salePrice || product.originalPrice,
+      _id: Date.now().toString(),
+      product: {
+        sku: product.sku,
+        name: product.name,
+        slug: product.sku.toLowerCase(),
+        brand: product.brand,
+        mainImage: product.mainImage || "/images/placeholder.png",
+        salePrice: product.salePrice || product.originalPrice
+      },
       quantity: quantity,
-      image: product.mainImage || "/images/placeholder.png",
+      color: color,
       size: size,
-      color: color
+      totalPrice: (product.salePrice || product.originalPrice) * quantity
     };
     addItem(cartItem);
     toast.success("Đã thêm sản phẩm vào giỏ hàng");
@@ -177,7 +182,7 @@ export default function OrderProducts() {
   // Tính tổng tiền
   const calculateTotal = () => {
     // Tính tổng tiền sản phẩm
-    const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
     
     // Tính phí vận chuyển
     const shippingFee = shippingMethod === ShippingMethod.EXPRESS ? 45000 : 
@@ -207,7 +212,7 @@ export default function OrderProducts() {
     }
 
     try {
-      const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+      const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
       const response = await fetchWithAuth<ApiResponse<Coupon>>(`/coupons/code/${promoCode}`);
 
       if (!response.success || !response.data) {
@@ -367,18 +372,18 @@ export default function OrderProducts() {
             {cartItems?.length > 0 ? (
               cartItems.map((item: CartItem) => (
                 <div
-                  key={item.productId}
+                  key={item._id}
                   className="flex items-start justify-between bg-gray-50 p-4 rounded-lg"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="font-medium truncate">{item.name}</p>
+                    <p className="font-medium truncate">{item.product.name}</p>
                     <div className="text-sm text-gray-600 mt-1 space-y-1">
                       <p>Số lượng: {item.quantity}</p>
-                      <p>Đơn giá: {item.price.toLocaleString()} VNĐ</p>
+                      <p>Đơn giá: {item.totalPrice.toLocaleString()} VNĐ</p>
                     </div>
                   </div>
                   <button
-                    onClick={() => removeItem(item.productId)}
+                    onClick={() => removeItem(item._id)}
                     className="ml-4 text-red-500 hover:text-red-700 transition-colors"
                   >
                     <X size={20} />
@@ -465,7 +470,7 @@ export default function OrderProducts() {
         <div className="bg-gray-50 p-4 rounded-lg space-y-2">
           <div className="flex justify-between text-sm">
             <span>Tạm tính:</span>
-            <span>{cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toLocaleString("vi-VN") : "0"}đ</span>
+            <span>{cartItems && cartItems.length > 0 ? cartItems.reduce((total, item) => total + item.totalPrice, 0).toLocaleString("vi-VN") : "0"}đ</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Phí vận chuyển ({shippingMethod === ShippingMethod.EXPRESS ? "Nhanh" : shippingMethod === ShippingMethod.SAME_DAY ? "Trong ngày" : "Thường"}):</span>

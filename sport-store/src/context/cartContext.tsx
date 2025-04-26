@@ -6,8 +6,8 @@ import type { CartItem } from "@/types/cart";
 interface CartContextType {
   items: CartItem[];
   addItem: (item: CartItem) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (itemId: string) => void;
+  updateQuantity: (itemId: string, quantity: number) => void;
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
@@ -33,11 +33,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addItem = (item: CartItem) => {
     setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.productId === item.productId);
+      const existingItem = prevItems.find((i) => 
+        i.product.sku === item.product.sku && 
+        i.color === item.color && 
+        i.size === item.size
+      );
       if (existingItem) {
         return prevItems.map((i) =>
-          i.productId === item.productId
-            ? { ...i, quantity: i.quantity + item.quantity }
+          i._id === existingItem._id
+            ? { 
+                ...i, 
+                quantity: i.quantity + item.quantity,
+                totalPrice: (i.quantity + item.quantity) * i.product.salePrice
+              }
             : i
         );
       }
@@ -45,14 +53,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  const removeItem = (productId: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.productId !== productId));
+  const removeItem = (itemId: string) => {
+    setItems((prevItems) => prevItems.filter((item) => item._id !== itemId));
   };
 
-  const updateQuantity = (productId: string, quantity: number) => {
+  const updateQuantity = (itemId: string, quantity: number) => {
     setItems((prevItems) =>
       prevItems.map((item) =>
-        item.productId === productId ? { ...item, quantity } : item
+        item._id === itemId 
+          ? { 
+              ...item, 
+              quantity,
+              totalPrice: quantity * item.product.salePrice
+            } 
+          : item
       )
     );
   };
@@ -63,7 +77,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
   const totalPrice = items.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.totalPrice,
     0
   );
 

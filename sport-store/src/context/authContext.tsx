@@ -97,6 +97,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             const now = Date.now();
             if (lastCheckRef.current && now - lastCheckRef.current < 5000) {
+                console.log("⏳ Skipping auth check - too soon");
                 return;
             }
 
@@ -118,36 +119,41 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 return;
             }
 
+            // Nếu có access token và stored user, sử dụng ngay
+            if (accessToken && storedUser) {
+                console.log("✅ Using stored user data with valid access token");
+                api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+                updateAuthState(storedUser, true);
+                lastCheckRef.current = now;
+                
+                // Verify token ngầm
+                try {
+                    const response = await api.get("/auth/check");
+                    if (response.data.success && response.data.user) {
+                        console.log("✅ Access token verified successfully");
+                        updateAuthState(response.data.user, true);
+                    }
+                } catch (error) {
+                    console.error("❌ Error verifying access token:", error);
+                    // Không xóa Authorization header ngay, để thử refresh token
+                }
+                return;
+            }
+
             // Nếu có access token, verify nó
             if (accessToken) {
                 try {
                     api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
                     const response = await api.get("/auth/check");
-                    if (response.data.success) {
-                        // Kiểm tra xem response.data.user có tồn tại không
-                        if (response.data.user) {
-                            console.log("✅ Access token is valid - updating user:", response.data.user);
-                            updateAuthState(response.data.user, true);
-                            lastCheckRef.current = now;
-                            return;
-                        } else {
-                            console.warn("⚠️ Access token is valid but user data is missing");
-                            // Nếu có storedUser, sử dụng nó
-                            if (storedUser) {
-                                console.log("ℹ️ Using stored user data instead");
-                                updateAuthState(storedUser, true);
-                                lastCheckRef.current = now;
-                                return;
-                            }
-                            // Nếu không có storedUser, xóa token và chuyển sang refresh
-                            console.log("❌ No user data available - clearing access token");
-                            delete api.defaults.headers.common['Authorization'];
-                            localStorage.removeItem(TOKEN_CONFIG.ACCESS_TOKEN.STORAGE_KEY);
-                        }
+                    if (response.data.success && response.data.user) {
+                        console.log("✅ Access token is valid - updating user:", response.data.user);
+                        updateAuthState(response.data.user, true);
+                        lastCheckRef.current = now;
+                        return;
                     }
-                } catch (error: unknown) {
+                } catch (error) {
                     console.error("❌ Error verifying access token:", error);
-                    delete api.defaults.headers.common['Authorization'];
+                    // Không xóa Authorization header ngay, để thử refresh token
                 }
             }
 
@@ -160,54 +166,52 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                     if (refreshResponse.data.success) {
                         const { accessToken: newAccessToken, refreshToken: newRefreshToken, user: userData } = refreshResponse.data.data;
                         
-                        // Kiểm tra xem userData có tồn tại không
-                        if (userData) {
-                            console.log("✅ Token refresh successful - updating state:", userData);
-                            
-                            // Lưu token mới
-                            setToken(newAccessToken, 'access');
-                            setToken(newRefreshToken, 'refresh');
-                            
-                            // Cập nhật header cho API calls
-                            api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
-                            
-                            // Cập nhật state
-                            updateAuthState(userData, true);
-                            lastCheckRef.current = now;
-                            return;
-                        } else {
-                            console.warn("⚠️ Token refresh successful but user data is missing");
-                            // Nếu có storedUser, sử dụng nó
-                            if (storedUser) {
-                                console.log("ℹ️ Using stored user data instead");
-                                updateAuthState(storedUser, true);
-                                lastCheckRef.current = now;
-                                return;
-                            }
-                            // Nếu không có storedUser, xóa token
-                            console.log("❌ No user data available - clearing tokens");
-                            clearTokens();
-                            clearUserData();
+                        if (!userData) {
+                            throw new Error("No user data in refresh response");
                         }
+                        
+                        console.log("✅ Token refresh successful - updating state:", userData);
+                        
+                        // Lưu token mới
+                        setToken(newAccessToken, 'access');
+                        setToken(newRefreshToken, 'refresh');
+                        
+                        // Cập nhật header cho API calls
+                        api.defaults.headers.common['Authorization'] = `Bearer ${newAccessToken}`;
+                        
+                        // Cập nhật state
+                        updateAuthState(userData, true);
+                        lastCheckRef.current = now;
+                        return;
                     }
                 } catch (refreshError) {
                     console.error("❌ Error refreshing token:", refreshError);
-                    delete api.defaults.headers.common['Authorization'];
-                    clearTokens();
-                    clearUserData();
+                    if (storedUser) {
+                        console.log("⚠️ Using stored user data as fallback");
+                        updateAuthState(storedUser, true);
+                        return;
+                    }
                 }
             }
 
-            // Nếu không thể verify hoặc refresh, logout
+            // Chỉ xóa state nếu không có cách nào khác
             console.log("❌ Authentication failed - clearing state");
             updateAuthState(null, false);
             clearTokens();
             clearUserData();
+            delete api.defaults.headers.common['Authorization'];
         } catch (error) {
             console.error("Error checking auth status:", error);
-            updateAuthState(null, false);
-            clearTokens();
-            clearUserData();
+            const storedUser = getUserData();
+            if (storedUser) {
+                console.log("⚠️ Error occurred, using stored user data as fallback");
+                updateAuthState(storedUser, true);
+            } else {
+                updateAuthState(null, false);
+                clearTokens();
+                clearUserData();
+                delete api.defaults.headers.common['Authorization'];
+            }
         }
     }, [updateAuthState]);
 

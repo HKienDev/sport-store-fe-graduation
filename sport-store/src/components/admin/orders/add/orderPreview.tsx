@@ -32,7 +32,7 @@ export default function OrderPreview({ onConfirmOrder, onBack }: OrderPreviewPro
   // Tính tổng tiền
   const calculateTotal = () => {
     // Tính tổng tiền sản phẩm
-    const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
     
     // Tính phí vận chuyển
     const shippingFee = shippingMethod === ShippingMethod.EXPRESS ? 45000 : 
@@ -54,7 +54,7 @@ export default function OrderPreview({ onConfirmOrder, onBack }: OrderPreviewPro
   };
 
   const total = calculateTotal();
-  const subtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  const subtotal = cartItems.reduce((total, item) => total + item.totalPrice, 0);
   const shippingFee = shippingMethod === ShippingMethod.EXPRESS ? 45000 : 
                      shippingMethod === ShippingMethod.SAME_DAY ? 60000 : 
                      30000;
@@ -78,7 +78,7 @@ export default function OrderPreview({ onConfirmOrder, onBack }: OrderPreviewPro
       // Tạo đơn hàng
       const orderData = {
         items: cartItems.map(item => ({
-          sku: item.sku,
+          sku: item.product.sku,
           quantity: item.quantity,
           color: item.color,
           size: item.size
@@ -211,23 +211,23 @@ export default function OrderPreview({ onConfirmOrder, onBack }: OrderPreviewPro
               {cartItems?.length > 0 ? (
                 cartItems.map((item: CartItem) => (
                   <div
-                    key={item.productId}
+                    key={item._id}
                     className="flex items-start gap-4 bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors"
                   >
                     <div className="relative h-20 w-20 flex-shrink-0 rounded-md overflow-hidden">
                       <Image
-                        src={item.image || "/images/placeholder.png"}
-                        alt={item.name}
+                        src={item.product.mainImage || "/images/placeholder.png"}
+                        alt={item.product.name}
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium truncate">{item.name}</p>
+                      <p className="font-medium truncate">{item.product.name}</p>
                       <div className="text-sm text-gray-600 mt-1 space-y-1">
                         <p>Số lượng: {item.quantity}</p>
-                        <p>Đơn giá: {item.price.toLocaleString("vi-VN")}đ</p>
-                        <p>Thành tiền: {(item.price * item.quantity).toLocaleString("vi-VN")}đ</p>
+                        <p>Đơn giá: {item.product.salePrice.toLocaleString("vi-VN")}đ</p>
+                        <p>Thành tiền: {(item.product.salePrice * item.quantity).toLocaleString("vi-VN")}đ</p>
                         {(item.size || item.color) && (
                           <div className="flex flex-wrap gap-2 mt-2">
                             {item.size && <Badge variant="outline">{item.size}</Badge>}

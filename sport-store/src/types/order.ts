@@ -23,7 +23,7 @@ export interface Order {
   items: OrderItem[];
   phone: string;
   totalAmount: number;
-  totalPrice?: number;
+  totalPrice: number;
   shippingFee: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;

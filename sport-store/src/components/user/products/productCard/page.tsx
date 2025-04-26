@@ -6,7 +6,7 @@ import Link from "next/link";
 import { ShoppingCart, Heart } from "lucide-react";
 import { Product } from "@/types/product";
 import { getCategoryById } from "@/services/categoryService";
-import { addToCart } from "@/services/cartService";
+import { cartService } from "@/services/cartService";
 import { toast } from "sonner";
 
 interface ProductCardProps {
@@ -64,11 +64,17 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         quantity: 1
       };
 
-      const response = await addToCart(cartData);
+      const response = await cartService.addToCart(cartData);
       
       if (response.success) {
         toast.success("Đã thêm sản phẩm vào giỏ hàng!");
       } else {
+        // Kiểm tra nếu lỗi liên quan đến token
+        if (response.message && response.message.includes('Phiên đăng nhập đã hết hạn')) {
+          toast.error(response.message);
+          // Không chuyển hướng ngay lập tức, để người dùng có thể thử lại
+          return;
+        }
         toast.error(response.message || "Có lỗi xảy ra khi thêm vào giỏ hàng!");
       }
     } catch (error) {
