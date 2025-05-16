@@ -11,7 +11,7 @@ function ProfilePageContent() {
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam === 'orders' ? 'orders' : 'profile');
 
-  // Handle scroll effect for the sticky header
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
