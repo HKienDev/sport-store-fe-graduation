@@ -476,7 +476,7 @@ const apiClient = {
                     throw new Error('No token found');
                 }
                 
-                const response = await api.get<ApiResponse<AuthCheckResponse>>('/auth/check', {
+                const response = await api.get<ApiResponse<AuthCheckResponse>>('/api/auth/check', {
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Cache-Control': 'no-cache'

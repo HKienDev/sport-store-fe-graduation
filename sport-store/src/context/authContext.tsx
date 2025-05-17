@@ -124,7 +124,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
                 
                 // Verify token ngầm
                 try {
-                    const response = await api.get("/auth/check");
+                    const response = await api.get("/api/auth/check");
                     // DEBUG LOG
                     console.log('[checkAuthStatus] /auth/check response:', response.data);
                     const userData = response.data.user || response.data.data;
@@ -145,7 +145,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             if (accessToken) {
                 try {
                     api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
-                    const response = await api.get("/auth/check");
+                    const response = await api.get("/api/auth/check");
                     // DEBUG LOG
                     console.log('[checkAuthStatus] /auth/check response:', response.data);
                     const userData = response.data.user || response.data.data;
