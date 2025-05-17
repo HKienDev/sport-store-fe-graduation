@@ -43,7 +43,7 @@ const nextConfig = {
                             style-src 'self' 'unsafe-inline';
                             img-src 'self' data: https: http:;
                             frame-src 'self' https://js.stripe.com https://hooks.stripe.com;
-                            connect-src 'self' http://localhost:4000 https://sport-store-be-graduation-production.up.railway.app https://api.stripe.com https://provinces.open-api.vn https://api.cloudinary.com;
+                            connect-src 'self' http://localhost:4000 https://sport-store-be-graduation-production.up.railway.app wss://sport-store-be-graduation-production.up.railway.app https://api.stripe.com https://provinces.open-api.vn https://api.cloudinary.com;
                             font-src 'self';
                             object-src 'none';
                             media-src 'self';
