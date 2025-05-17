@@ -1,37 +1,22 @@
 "use client";
 
 import { useEffect, Suspense } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { jwtDecode } from "jwt-decode";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/authContext";
 
 const GoogleAuthHandler = () => {
-  const searchParams = useSearchParams();
+  const { user, isAuthenticated } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    const token = searchParams.get("token");
-
-    if (token) {
-      try {
-        const decodedToken = jwtDecode<{ role?: string }>(token);
-        console.log("Decoded Token:", decodedToken);
-
-        // Lưu token vào localStorage để sử dụng sau này
-        localStorage.setItem("token", token);
-
-        // Nếu token có chứa role admin thì chuyển hướng về dashboard
-        if (decodedToken && decodedToken.role === 'admin') {
-          router.push('/admin/dashboard');
-        } else {
-          router.push('/');
-        }
-      } catch (error) {
-        console.error("❌ Lỗi khi decode token:", error);
+    if (isAuthenticated && user) {
+      if (user.role === 'admin') {
+        router.push('/admin/dashboard');
+      } else {
+        router.push('/');
       }
-    } else {
-      console.error("Không nhận được token trong URL");
     }
-  }, [searchParams, router]);
+  }, [isAuthenticated, user, router]);
 
   return <div className="text-center mt-10">Đang xử lý đăng nhập...</div>;
 };

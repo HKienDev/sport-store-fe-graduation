@@ -29,48 +29,11 @@ const LoginForm = ({ error, loading }: LoginFormProps) => {
       if (!result.success) {
         toast.error(result.message || "Đăng nhập thất bại");
       } else {
-        await handleRedirect(router, user, window.location.pathname);
+        await handleRedirect(router, result.data?.user ?? null, window.location.pathname);
       }
     } catch (error) {
       console.error("Login error:", error);
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          // Lỗi từ server
-          const errorMessage = error.response.data?.message;
-          const errors = error.response.data?.errors;
-
-          // Xử lý các trường hợp lỗi cụ thể
-          switch (errorMessage) {
-            case 'INVALID_CREDENTIALS':
-              toast.error('Email hoặc mật khẩu không chính xác');
-              break;
-            case 'ACCOUNT_NOT_VERIFIED':
-              toast.error('Tài khoản chưa được xác thực. Vui lòng kiểm tra email');
-              break;
-            case 'ACCOUNT_INACTIVE':
-              toast.error('Tài khoản đã bị khóa. Vui lòng liên hệ hỗ trợ');
-              break;
-            case 'ACCOUNT_BLOCKED':
-              toast.error('Tài khoản đã bị chặn. Vui lòng liên hệ hỗ trợ');
-              break;
-            default:
-              // Hiển thị lỗi từ server nếu có
-              if (errors && errors.length > 0) {
-                toast.error(errors[0].message);
-              } else {
-                toast.error(errorMessage || "Lỗi server");
-              }
-          }
-        } else if (error.request) {
-          // Không nhận được response
-          toast.error("Không thể kết nối đến server");
-        } else {
-          // Lỗi khác
-          toast.error("Đăng nhập thất bại");
-        }
-      } else {
-        toast.error("Đăng nhập thất bại");
-      }
+      toast.error("Đăng nhập thất bại");
     }
   };
 

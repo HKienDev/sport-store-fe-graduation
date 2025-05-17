@@ -18,12 +18,21 @@ export const useLogin = () => {
     try {
       setLoading(true);
       setError(null);
-      await login(data.email, data.password);
-      toast({
-        title: SUCCESS_MESSAGES.LOGIN_SUCCESS,
-        description: "Chào mừng bạn quay trở lại!",
-        variant: "default",
-      });
+      const result = await login(data.email, data.password);
+      if (result.success) {
+        toast({
+          title: SUCCESS_MESSAGES.LOGIN_SUCCESS,
+          description: "Chào mừng bạn quay trở lại!",
+          variant: "default",
+        });
+      } else {
+        setError(result.message || ERROR_MESSAGES.INVALID_CREDENTIALS);
+        toast({
+          title: "Lỗi đăng nhập",
+          description: result.message || ERROR_MESSAGES.INVALID_CREDENTIALS,
+          variant: "destructive",
+        });
+      }
     } catch (error) {
       const axiosError = error as AxiosError<{ message: string }>;
       console.error('Login error:', error);

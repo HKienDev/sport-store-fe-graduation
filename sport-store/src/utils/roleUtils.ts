@@ -51,4 +51,9 @@ export const hasAdminAccess = (user: AuthUser | null): boolean => {
 export const hasUserAccess = (user: AuthUser | null): boolean => {
     if (!user) return false;
     return user.isActive && user.isVerified;
-}; 
+};
+
+/**
+ * Các hàm kiểm tra quyền chỉ dùng cho UI (ẩn/hiện component),
+ * không dùng để quyết định redirect hoặc hiển thị lỗi sau login.
+ */ 

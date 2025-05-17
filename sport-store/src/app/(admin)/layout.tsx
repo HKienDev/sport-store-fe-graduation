@@ -20,22 +20,14 @@ export default function AdminLayout({
     useEffect(() => {
         const verifyAuth = async () => {
             await checkAuthStatus();
-            const storedUser = JSON.parse(localStorage.getItem('user') || 'null');
-            console.log('[AdminLayout] verifyAuth result:', storedUser);
-            if (!storedUser) {
-                console.log('[AdminLayout] Chưa đăng nhập, chuyển hướng về trang login');
+            if (!user || user.role !== 'admin') {
                 router.replace(ROUTES.LOGIN);
-                return;
-            }
-            if (storedUser && storedUser.role !== 'admin') {
-                console.log('[AdminLayout] Không phải admin, chuyển hướng về trang chủ');
-                router.replace(ROUTES.HOME);
                 return;
             }
             setIsLoading(false);
         };
         verifyAuth();
-    }, [checkAuthStatus, router]);
+    }, [checkAuthStatus, router, user]);
 
     if (isLoading) {
         return (

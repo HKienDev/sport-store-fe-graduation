@@ -42,7 +42,7 @@ export default function AdminRolesList() {
   const { user, isAuthenticated, loading } = useAuth();
 
   if (!loading && (!isAuthenticated || user?.role !== 'admin')) {
-    router.push('/admin/login');
+    router.push('/auth/login');
     return null;
   }
 
