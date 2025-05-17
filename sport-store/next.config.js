@@ -81,11 +81,6 @@ const nextConfig = {
             }
         ];
     },
-    // Thêm cấu hình HTTPS cho development
-    devServer: {
-        https: true,
-        port: 3000
-    }
 }
 
 module.exports = nextConfig 
