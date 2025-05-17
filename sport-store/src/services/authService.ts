@@ -186,12 +186,7 @@ export const googleCallback = async (code: string): Promise<ApiResponse<GoogleAu
             console.log('🔑 User role:', user.role);
             console.log('👑 Is admin:', isAdmin(user));
             
-            // Redirect based on role
-            if (user.role === 'admin') {
-                window.location.replace('/admin/dashboard');
-            } else {
-                window.location.replace('/');
-            }
+            // Không redirect ở đây, để component/context xử lý
         }
         return response.data;
     } catch (error) {

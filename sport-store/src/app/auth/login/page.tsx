@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import GoogleLoginButton from "@/components/auth/googleLoginButton/page";
 import LoginForm from "@/components/auth/loginForm/page";
 import { useAuth } from "@/context/authContext";
+import { handleRedirect } from "@/utils/navigationUtils";
 
 const LoginPage = () => {
   const [animateForm, setAnimateForm] = useState(false);
@@ -20,11 +21,7 @@ const LoginPage = () => {
     }, 100);
 
     if (isAuthenticated && user) {
-      if (user.role === "admin") {
-        router.replace("/admin/dashboard");
-      } else {
-        router.replace("/user");
-      }
+      handleRedirect(router, user, window.location.pathname);
     }
   }, [isAuthenticated, user, router]);
 
