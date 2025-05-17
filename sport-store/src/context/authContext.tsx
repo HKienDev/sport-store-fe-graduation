@@ -348,7 +348,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
 
             console.log("✅ Đăng nhập thành công:", { user, isAuthenticated: true });
-            return { success: true, message: SUCCESS_MESSAGES.LOGIN_SUCCESS };
+            return { success: true, message: SUCCESS_MESSAGES.LOGIN_SUCCESS, user };
         } catch (error) {
             console.error("❌ Lỗi đăng nhập:", error);
             setLoading(false);
