@@ -31,6 +31,7 @@ function ProfilePageContent() {
   }, [tabParam]);
 
   useEffect(() => {
+    let isMounted = true;
     // Fetch profile để kiểm tra role
     const fetchProfile = async () => {
       try {
@@ -38,16 +39,18 @@ function ProfilePageContent() {
           credentials: 'include',
         });
         const data = await res.json();
+        if (!isMounted) return;
         if (!data?.success || !data?.data) {
           router.replace('/login');
         } else if (data.data.role === 'admin') {
           router.replace('/admin/dashboard');
         }
       } catch {
-        router.replace('/login');
+        if (isMounted) router.replace('/login');
       }
     };
     fetchProfile();
+    return () => { isMounted = false; };
   }, [router]);
 
   return (

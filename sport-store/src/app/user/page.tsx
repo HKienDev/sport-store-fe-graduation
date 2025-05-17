@@ -11,51 +11,56 @@ import { Product } from "@/types/product";
 import { getAllProducts } from "@/services/productService";
 import Skeleton from "@/components/common/Skeleton";
 
+// Thêm khai báo cho window.__checkedAuth
+declare global {
+  interface Window {
+    __checkedAuth?: boolean;
+  }
+}
+
 const HomePage = () => {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user, isAuthenticated, checkAuthStatus } = useAuth();
+  const { user, checkAuthStatus } = useAuth();
 
   useEffect(() => {
-    console.log("🏠 HomePage - Initial auth state:", { user, isAuthenticated });
-    
-    // Kiểm tra role và chuyển hướng nếu là admin
-    if (user) {
-      console.log("👤 HomePage - Current user:", user);
-      if (user.role === "admin") {
-        console.log("👑 User là admin, chuyển hướng đến dashboard");
-        router.replace("/admin/dashboard");
-        return;
-      }
-    } else {
-      console.log("❌ HomePage - No user found, checking auth status");
+    if (user === null && typeof window !== 'undefined' && !(window as Window & { __checkedAuth?: boolean }).__checkedAuth) {
+      (window as Window & { __checkedAuth?: boolean }).__checkedAuth = true;
       checkAuthStatus();
     }
+  }, [user, checkAuthStatus]);
 
+  useEffect(() => {
+    if (
+      user &&
+      user.role === "admin" &&
+      typeof window !== "undefined" &&
+      window.location.pathname === "/user"
+    ) {
+      router.replace("/admin/dashboard");
+    }
+  }, [user, router]);
+
+  useEffect(() => {
+    // Fetch products
     const fetchData = async () => {
       try {
         const response = await getAllProducts();
         if (!response.success) {
           throw new Error("Lỗi khi lấy dữ liệu");
         }
-
-        const productsData = response.data.products;
-        console.log("Products Data:", productsData);
-
-        setProducts(productsData);
-      } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
+        setProducts(response.data.products);
+      } catch {
         setError("Đã xảy ra lỗi khi tải dữ liệu");
         setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-
     fetchData();
-  }, [router, checkAuthStatus, user, isAuthenticated]);
+  }, []);
 
   if (loading) return (
     <div className="min-h-screen bg-white">
@@ -120,7 +125,6 @@ const HomePage = () => {
                 fill
                 className="object-cover object-center brightness-[1.02]"
                 priority
-                style={{ width: '100%', height: 400 }}
               />
             </div>
 
@@ -286,7 +290,6 @@ const HomePage = () => {
                 fill
                 className="object-cover transition duration-700 ease-in-out"
                 priority
-                style={{ width: '100%', height: 600 }}
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

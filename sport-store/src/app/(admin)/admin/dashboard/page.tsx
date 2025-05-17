@@ -19,21 +19,25 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch profile để kiểm tra role
+    let isMounted = true;
     const fetchProfile = async () => {
       try {
         const res = await fetch(`${API_URL}/auth/profile`, {
           credentials: 'include',
         });
         const data = await res.json();
-        if (!data?.success || !data?.data || data.data.role !== 'admin') {
+        if (!isMounted) return;
+        if (!data?.success || !data?.data) {
+          router.replace('/user');
+        } else if (data.data.role !== 'admin') {
           router.replace('/user');
         }
       } catch {
-        router.replace('/user');
+        if (isMounted) router.replace('/user');
       }
     };
     fetchProfile();
+    return () => { isMounted = false; };
   }, [router]);
 
   useEffect(() => {
