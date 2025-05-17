@@ -8,7 +8,7 @@ import type { AxiosError } from 'axios';
 import { handleRedirect } from "@/utils/navigationUtils";
 
 export const useLogin = () => {
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
@@ -50,9 +50,7 @@ export const useLogin = () => {
 
     try {
       await handleLogin({ email, password });
-      
-      // Xử lý chuyển hướng
-      const user = JSON.parse(localStorage.getItem('user') || 'null');
+      // Xử lý chuyển hướng: luôn lấy user từ context
       await handleRedirect(router, user, window.location.pathname);
     } catch (err) {
       console.error("Lỗi đăng nhập:", err);

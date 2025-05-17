@@ -340,9 +340,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             setToken(accessToken, 'access');
             setToken(refreshToken, 'refresh');
 
-            // Cập nhật state và storage
-            console.log("✅ Updating auth state after login:", user);
-            updateAuthState(user, true);
+            // Sau khi login thành công, luôn gọi checkAuthStatus để đồng bộ user từ BE
+            console.log("✅ Đăng nhập thành công, đồng bộ user từ BE");
+            await checkAuthStatus();
 
             // Cập nhật header cho các request tiếp theo
             api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;

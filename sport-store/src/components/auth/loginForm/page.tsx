@@ -29,7 +29,7 @@ const LoginForm = ({ error, loading }: LoginFormProps) => {
       if (!result.success) {
         toast.error(result.message || "Đăng nhập thất bại");
       } else {
-        await handleRedirect(router, result.data?.user ?? null, window.location.pathname);
+        await handleRedirect(router, user, window.location.pathname);
       }
     } catch (error) {
       console.error("Login error:", error);
