@@ -41,12 +41,12 @@ function ProfilePageContent() {
         const data = await res.json();
         if (!isMounted) return;
         if (!data?.success || !data?.data) {
-          router.replace('/login');
+          router.replace('/auth/login');
         } else if (data.data.role === 'admin') {
           router.replace('/admin/dashboard');
         }
       } catch {
-        if (isMounted) router.replace('/login');
+        if (isMounted) router.replace('/auth/login');
       }
     };
     fetchProfile();

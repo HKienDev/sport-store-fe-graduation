@@ -21,72 +21,46 @@ export const handleRedirect = debounce(async (
     currentPath: string
 ): Promise<void> => {
     try {
-        // Nếu đang chuyển hướng, không thực hiện thêm
+        console.log('[handleRedirect] Bắt đầu chuyển hướng:', { user, currentPath });
         if (isRedirecting) {
-            console.log('⚠️ Đang trong quá trình chuyển hướng, bỏ qua');
+            console.log('[handleRedirect] ⚠️ Đang trong quá trình chuyển hướng, bỏ qua');
             return;
         }
-
-        // Nếu không có router, không thực hiện chuyển hướng
         if (!router) {
-            console.warn('⚠️ Router không khả dụng, không thể chuyển hướng');
+            console.warn('[handleRedirect] ⚠️ Router không khả dụng, không thể chuyển hướng');
             return;
         }
-
-        // Đánh dấu đang chuyển hướng
         isRedirecting = true;
-
-        // Xác định đường dẫn chuyển hướng
         let redirectPath = '/';
-
-        // Nếu có user, xử lý chuyển hướng dựa trên role
+        let reason = '';
         if (user) {
-            console.log('👤 Xử lý chuyển hướng cho user:', {
-                role: user.role,
-                currentPath
-            });
-
-            // Xác định đường dẫn chuyển hướng dựa trên role
+            console.log('[handleRedirect] 👤 User info:', user);
             if (user.role === UserRole.ADMIN) {
                 redirectPath = '/admin/dashboard';
+                reason = 'role=admin';
             } else {
-                redirectPath = '/user/';
+                redirectPath = '/user';
+                reason = 'role=user';
             }
-
-            // Nếu đang ở trang auth, thực hiện chuyển hướng
             if (currentPath.startsWith('/auth/')) {
-                // Nếu đường dẫn chuyển hướng giống với đường dẫn hiện tại, không thực hiện chuyển hướng
                 if (redirectPath === currentPath) {
-                    console.log('⚠️ Đường dẫn chuyển hướng giống với đường dẫn hiện tại, bỏ qua');
+                    console.log('[handleRedirect] ⚠️ Đường dẫn chuyển hướng giống với đường dẫn hiện tại, bỏ qua');
                     isRedirecting = false;
                     return;
                 }
             }
         } else {
-            // Nếu không có user và đang ở trang cần xác thực
             if (currentPath.startsWith('/admin/') || currentPath.startsWith('/user/')) {
                 redirectPath = '/auth/login';
+                reason = 'no user, cần xác thực';
             }
         }
-
-        // Log thông tin chuyển hướng
-        console.log('🔄 Thực hiện chuyển hướng:', {
-            from: currentPath,
-            to: redirectPath,
-            hasUser: !!user,
-            userRole: user?.role
-        });
-
-        // Thực hiện chuyển hướng với router.push
+        console.log('[handleRedirect] 🔄 Thực hiện chuyển hướng:', { from: currentPath, to: redirectPath, hasUser: !!user, userRole: user?.role, reason });
         await router.push(redirectPath);
-
-        // Đợi một chút để đảm bảo chuyển hướng hoàn tất
         await new Promise(resolve => setTimeout(resolve, REDIRECT_DELAY));
-
-        // Reset trạng thái chuyển hướng
         isRedirecting = false;
     } catch (error) {
-        console.error('❌ Lỗi khi chuyển hướng:', error);
+        console.error('[handleRedirect] ❌ Lỗi khi chuyển hướng:', error);
         isRedirecting = false;
         throw error;
     }
