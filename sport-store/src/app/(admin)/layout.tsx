@@ -29,6 +29,12 @@ export default function AdminLayout({
         verifyAuth();
     }, [checkAuthStatus, router, user]);
 
+    useEffect(() => {
+        if (!isLoading && (!user || user.role !== 'admin')) {
+            router.replace(ROUTES.LOGIN);
+        }
+    }, [isLoading, user, router]);
+
     if (isLoading) {
         return (
             <div className="flex h-screen items-center justify-center">

@@ -9,36 +9,21 @@ import { useDashboard } from '@/hooks/useDashboard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { API_URL } from '@/utils/api';
+import { useAuth } from '@/context/authContext';
 
 type TimeRange = 'day' | 'month' | 'year';
 
 export default function Dashboard() {
   const [timeRange, setTimeRange] = useState<TimeRange>('day');
   const { dashboardData, isLoading, error, refresh } = useDashboard(timeRange);
+  const { user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    let isMounted = true;
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch(`${API_URL}/auth/profile`, {
-          credentials: 'include',
-        });
-        const data = await res.json();
-        if (!isMounted) return;
-        if (!data?.success || !data?.data) {
-          router.replace('/user');
-        } else if (data.data.role !== 'admin') {
-          router.replace('/user');
-        }
-      } catch {
-        if (isMounted) router.replace('/user');
-      }
-    };
-    fetchProfile();
-    return () => { isMounted = false; };
-  }, [router]);
+    if (!loading && (!user || user.role !== 'admin')) {
+      router.replace('/auth/login');
+    }
+  }, [loading, user, router]);
 
   useEffect(() => {
     // Lắng nghe sự kiện xóa đơn hàng
