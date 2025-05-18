@@ -288,4 +288,6 @@ export default NewOrderEmail;
 const hr = {
   borderColor: '#e6ebf1',
   margin: '20px 0',
-}; 
+};
+
+export type { NewOrderEmailProps }; 

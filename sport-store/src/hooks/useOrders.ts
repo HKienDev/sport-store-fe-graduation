@@ -8,6 +8,7 @@ import type { CreateOrderData, UpdateOrderData } from '@/types/base';
 import { OrderStatus, PaymentStatus } from '@/types/base';
 import { sendEmailFromTemplate } from '@/lib/email';
 import NewOrderEmail from '@/email-templates/NewOrderEmail';
+import type { NewOrderEmailProps } from '@/email-templates/NewOrderEmail';
 
 export function useOrders(options: OrderQueryParams = {}) {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -90,20 +91,48 @@ export function useOrders(options: OrderQueryParams = {}) {
             const order = response.data.data;
             // Gửi email xác nhận đơn hàng cho user
             try {
-                await sendEmailFromTemplate({
-                    to: order.shippingAddress?.email || user.email,
+                await sendEmailFromTemplate<NewOrderEmailProps>({
+                    to: user.email,
                     subject: `Xác nhận đơn hàng #${order.shortId} từ Sport Store`,
                     template: NewOrderEmail,
                     templateProps: {
                         shortId: order.shortId,
-                        shippingAddress: order.shippingAddress,
-                        items: order.items,
-                        createdAt: order.createdAt,
-                        subtotal: order.subtotal,
-                        directDiscount: order.directDiscount,
-                        couponDiscount: order.couponDiscount,
-                        shippingFee: order.shippingFee,
-                        totalPrice: order.totalPrice,
+                        shippingAddress: (() => {
+                            try {
+                                const addressParts = [
+                                    typeof order.shippingAddress.address?.street === 'string' ? order.shippingAddress.address?.street : '',
+                                    typeof order.shippingAddress.address?.ward?.name === 'string' ? order.shippingAddress.address?.ward?.name : '',
+                                    typeof order.shippingAddress.address?.district?.name === 'string' ? order.shippingAddress.address?.district?.name : '',
+                                    typeof order.shippingAddress.address?.province?.name === 'string' ? order.shippingAddress.address?.province?.name : ''
+                                ];
+                                const addressString = addressParts.filter((v) => typeof v === 'string' && v.length > 0).join(', ');
+                                return addressString || '';
+                            } catch {
+                                return '';
+                            }
+                        })(),
+                        fullName: typeof order.shippingAddress.fullName === 'string' ? order.shippingAddress.fullName : '',
+                        deliveryDate: '',
+                        items: order.items.map((item) => {
+                            let image = '';
+                            if ('image' in item && typeof item.image === 'string' && item.image) {
+                                image = item.image;
+                            } else if (item.product && typeof item.product === 'object' && Array.isArray((item.product as { images?: string[] }).images)) {
+                                image = ((item.product as { images?: string[] }).images?.[0]) || '';
+                            }
+                            return {
+                                name: item.name,
+                                price: item.price?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
+                                image,
+                                quantity: item.quantity,
+                            };
+                        }),
+                        createdAt: typeof order.createdAt === 'string' ? order.createdAt : new Date(order.createdAt).toLocaleDateString('vi-VN'),
+                        subtotal: order.subtotal?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
+                        directDiscount: order.directDiscount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
+                        couponDiscount: order.couponDiscount?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
+                        shippingFee: order.shippingFee?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
+                        totalPrice: order.totalPrice?.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' }) || '',
                         paymentMethod: order.paymentMethod,
                         paymentStatus: order.paymentStatus,
                     }

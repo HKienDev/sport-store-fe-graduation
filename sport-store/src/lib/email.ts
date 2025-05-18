@@ -1,17 +1,17 @@
 import { render } from '@react-email/render';
 import axios from 'axios';
 import { API_URL } from '@/utils/api';
-import { OrderEmailProps } from '@/types/email';
 import React from 'react';
 
-interface SendEmailParams {
+// Sử dụng generic cho props
+interface SendEmailParams<T> {
   to: string;
   subject: string;
-  template: React.ComponentType<OrderEmailProps>;
-  templateProps: OrderEmailProps;
+  template: React.ComponentType<T>;
+  templateProps: T;
 }
 
-export const sendEmailFromTemplate = async ({ to, subject, template: Template, templateProps }: SendEmailParams) => {
+export const sendEmailFromTemplate = async <T>({ to, subject, template: Template, templateProps }: SendEmailParams<T>) => {
   console.log('\n=== DEBUG FRONTEND EMAIL ===');
   console.log('Request Info:');
   console.log('- To:', to);
@@ -22,7 +22,7 @@ export const sendEmailFromTemplate = async ({ to, subject, template: Template, t
   try {
     // Render template thành HTML
     console.log('\nRendering template...');
-    const html = await render(React.createElement(Template, templateProps));
+    const html = await render(React.createElement(Template as React.ComponentType<object>, templateProps as unknown as object));
     console.log('✓ Template rendered successfully');
     console.log('- HTML length:', html.length);
     console.log('- First 100 chars:', html.substring(0, 100) + '...');

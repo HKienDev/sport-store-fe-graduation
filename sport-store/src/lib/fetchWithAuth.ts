@@ -1,6 +1,5 @@
 import apiClient from './api';
 import type { ApiResponse } from '@/types/api';
-import type { AuthCheckResponse } from '@/types/auth';
 
 export const fetchWithAuth = async <T>(
     url: string,
