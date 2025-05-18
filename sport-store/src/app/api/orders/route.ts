@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   try {
     const orderData = await request.json();
 
-    // Gửi email xác nhận đơn hàng cho user
+    console.log('Gửi email user...');
     await sendEmailFromTemplate({
       to: orderData.shippingAddress.email,
       subject: `Xác nhận đơn hàng #${orderData.shortId}`,
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       templateProps: orderData as OrderEmailProps["order"]
     });
 
-    // Gửi email thông báo cho admin
+    console.log('Gửi email admin...');
     await sendAdminEmailFromTemplate({
       subject: `Có đơn hàng mới #${orderData.shortId}`,
       template: AdminNewOrderEmail,
@@ -56,6 +56,8 @@ export async function POST(request: Request) {
         paymentStatus: orderData.paymentStatus,
       }
     });
+
+    console.log('Đã gọi xong 2 hàm gửi email');
 
     return NextResponse.json({ 
       success: true, 
