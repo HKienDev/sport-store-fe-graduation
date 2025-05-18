@@ -6,6 +6,8 @@ import { ERROR_MESSAGES, SUCCESS_MESSAGES } from '@/config/constants';
 import type { Order, OrderQueryParams } from '@/types/api';
 import type { CreateOrderData, UpdateOrderData } from '@/types/base';
 import { OrderStatus, PaymentStatus } from '@/types/base';
+import { sendEmailFromTemplate } from '@/lib/email';
+import NewOrderEmail from '@/email-templates/NewOrderEmail';
 
 export function useOrders(options: OrderQueryParams = {}) {
     const [orders, setOrders] = useState<Order[]>([]);
@@ -85,12 +87,36 @@ export function useOrders(options: OrderQueryParams = {}) {
             if (!response.data.data) {
                 throw new Error(ERROR_MESSAGES.NETWORK_ERROR);
             }
+            const order = response.data.data;
+            // Gửi email xác nhận đơn hàng cho user
+            try {
+                await sendEmailFromTemplate({
+                    to: order.shippingAddress?.email || user.email,
+                    subject: `Xác nhận đơn hàng #${order.shortId} từ Sport Store`,
+                    template: NewOrderEmail,
+                    templateProps: {
+                        shortId: order.shortId,
+                        shippingAddress: order.shippingAddress,
+                        items: order.items,
+                        createdAt: order.createdAt,
+                        subtotal: order.subtotal,
+                        directDiscount: order.directDiscount,
+                        couponDiscount: order.couponDiscount,
+                        shippingFee: order.shippingFee,
+                        totalPrice: order.totalPrice,
+                        paymentMethod: order.paymentMethod,
+                        paymentStatus: order.paymentStatus,
+                    }
+                });
+            } catch (emailError) {
+                console.error('Gửi email xác nhận đơn hàng thất bại:', emailError);
+            }
             toast({
                 title: "Thành công",
                 description: SUCCESS_MESSAGES.ORDER_CREATED,
                 variant: "default"
             });
-            return response.data.data;
+            return order;
         } catch (error) {
             console.error('Failed to create order:', error);
             toast({

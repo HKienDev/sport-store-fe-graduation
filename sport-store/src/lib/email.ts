@@ -56,14 +56,14 @@ export const sendEmailFromTemplate = async ({ to, subject, template: Template, t
 };
 
 // Hàm gửi email admin (không cần to, gửi mặc định cho admin)
-interface SendAdminEmailParams {
+interface SendAdminEmailParams<T = unknown> {
   subject: string;
-  template: React.ComponentType<any>;
-  templateProps: any;
+  template: React.ComponentType<T>;
+  templateProps: T;
 }
 
-export const sendAdminEmailFromTemplate = async ({ subject, template: Template, templateProps }: SendAdminEmailParams) => {
-  const html = await render(React.createElement(Template, templateProps));
+export const sendAdminEmailFromTemplate = async <T = unknown>({ subject, template: Template, templateProps }: SendAdminEmailParams<T>) => {
+  const html = await render(React.createElement(Template as React.ComponentType<object>, templateProps as unknown as object));
   const response = await axios.post(
     `${API_URL}/api/email/send-admin`,
     {
