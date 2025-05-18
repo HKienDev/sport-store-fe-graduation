@@ -1,26 +1,33 @@
+import { Html, Head, Preview, Body, Container, Section, Heading, Text, Hr } from '@react-email/components';
 import * as React from 'react';
 
 interface AdminProductLowStockEmailProps {
   productName: string;
-  productSku: string;
-  stockLeft: string;
+  productId: string;
+  quantity: number;
+  time: string;
 }
 
-const AdminProductLowStockEmail: React.FC<AdminProductLowStockEmailProps> = ({
-  productName,
-  productSku,
-  stockLeft,
-}) => (
-  <div>
-    <h2>Cảnh báo sản phẩm sắp hết hàng</h2>
-    <p>
-      Sản phẩm <strong>{productName}</strong> (Mã: {productSku}) sắp hết hàng.
-    </p>
-    <p>
-      <strong>Số lượng còn lại:</strong> {stockLeft}
-    </p>
-    <p>Vui lòng kiểm tra và nhập thêm hàng hoặc ẩn sản phẩm khỏi shop nếu cần thiết.</p>
-  </div>
+const AdminProductLowStockEmail: React.FC<AdminProductLowStockEmailProps> = ({ productName, productId, quantity, time }) => (
+  <Html>
+    <Head />
+    <Preview>Cảnh báo sản phẩm sắp hết: {productName}</Preview>
+    <Body style={{ background: '#f9f9f9', fontFamily: 'Arial, sans-serif' }}>
+      <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
+        <Section style={{ textAlign: 'center' }}>
+          <Heading>Cảnh báo sản phẩm sắp hết hàng</Heading>
+          <Text>Sản phẩm: <b>{productName}</b> (Mã: {productId})</Text>
+          <Text>Số lượng còn lại: <b>{quantity}</b></Text>
+          <Text>Thời gian cảnh báo: {time}</Text>
+        </Section>
+        <Hr />
+        <Section>
+          <Text style={{ fontSize: 12, color: '#888' }}>Vui lòng kiểm tra kho và nhập thêm hàng nếu cần.</Text>
+          <Text style={{ fontSize: 12, color: '#888' }}>Mọi thắc mắc liên hệ: support@sportstore.com</Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
 );
 
 export default AdminProductLowStockEmail; 

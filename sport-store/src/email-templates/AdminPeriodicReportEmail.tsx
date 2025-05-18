@@ -1,51 +1,34 @@
+import { Html, Head, Preview, Body, Container, Section, Heading, Text, Hr } from '@react-email/components';
 import * as React from 'react';
-
-interface BestSeller {
-  name: string;
-  sold: number;
-}
 
 interface AdminPeriodicReportEmailProps {
   reportType: string;
-  reportTime: string;
-  totalOrders: string;
-  totalRevenue: string;
-  newCustomers: string;
-  bestSellers: BestSeller[];
+  time: string;
+  description: string;
 }
 
-const AdminPeriodicReportEmail: React.FC<AdminPeriodicReportEmailProps> = ({
-  reportType,
-  reportTime,
-  totalOrders,
-  totalRevenue,
-  newCustomers,
-  bestSellers,
-}) => (
-  <div>
-    <h2>Báo cáo {reportType}</h2>
-    <p>
-      <strong>Thời gian:</strong> {reportTime}
-    </p>
-    <p>
-      <strong>Tổng số đơn hàng:</strong> {totalOrders}
-    </p>
-    <p>
-      <strong>Tổng doanh thu:</strong> {totalRevenue} VND
-    </p>
-    <p>
-      <strong>Số khách hàng mới:</strong> {newCustomers}
-    </p>
-    <h3>Sản phẩm bán chạy:</h3>
-    <ul>
-      {bestSellers.map((item, idx) => (
-        <li key={idx}>
-          {item.name} (Đã bán: {item.sold})
-        </li>
-      ))}
-    </ul>
-    <p>Vui lòng xem chi tiết trong hệ thống quản trị.</p>
-  </div>
+const AdminPeriodicReportEmail: React.FC<AdminPeriodicReportEmailProps> = ({ reportType, time, description }) => (
+  <Html>
+    <Head />
+    <Preview>Báo cáo định kỳ: {reportType}</Preview>
+    <Body style={{ background: '#f9f9f9', fontFamily: 'Arial, sans-serif' }}>
+      <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
+        <Section style={{ textAlign: 'center' }}>
+          <Heading>Báo cáo định kỳ hệ thống</Heading>
+          <Text>Loại báo cáo: <b>{reportType}</b></Text>
+          <Text>Thời gian: {time}</Text>
+        </Section>
+        <Section>
+          <Text><b>Mô tả:</b> {description}</Text>
+        </Section>
+        <Hr />
+        <Section>
+          <Text style={{ fontSize: 12, color: '#888' }}>Vui lòng kiểm tra chi tiết báo cáo trên hệ thống quản trị.</Text>
+          <Text style={{ fontSize: 12, color: '#888' }}>Mọi thắc mắc liên hệ: support@sportstore.com</Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
 );
 
 export default AdminPeriodicReportEmail; 

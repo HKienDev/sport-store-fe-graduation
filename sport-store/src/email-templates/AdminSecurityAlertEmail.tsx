@@ -1,39 +1,34 @@
+import { Html, Head, Preview, Body, Container, Section, Heading, Text, Hr } from '@react-email/components';
 import * as React from 'react';
 
 interface AdminSecurityAlertEmailProps {
   alertType: string;
+  time: string;
   description: string;
-  alertTime: string;
-  ipAddress: string;
-  userAgent: string;
 }
 
-const AdminSecurityAlertEmail: React.FC<AdminSecurityAlertEmailProps> = ({
-  alertType,
-  description,
-  alertTime,
-  ipAddress,
-  userAgent,
-}) => (
-  <div>
-    <h2>Cảnh báo bảo mật</h2>
-    <p>
-      <strong>Loại cảnh báo:</strong> {alertType}
-    </p>
-    <p>
-      <strong>Mô tả:</strong> {description}
-    </p>
-    <p>
-      <strong>Thời gian:</strong> {alertTime}
-    </p>
-    <p>
-      <strong>IP:</strong> {ipAddress}
-    </p>
-    <p>
-      <strong>User Agent:</strong> {userAgent}
-    </p>
-    <p>Vui lòng kiểm tra và xử lý nếu phát hiện dấu hiệu bất thường.</p>
-  </div>
+const AdminSecurityAlertEmail: React.FC<AdminSecurityAlertEmailProps> = ({ alertType, time, description }) => (
+  <Html>
+    <Head />
+    <Preview>Cảnh báo bảo mật: {alertType}</Preview>
+    <Body style={{ background: '#f9f9f9', fontFamily: 'Arial, sans-serif' }}>
+      <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
+        <Section style={{ textAlign: 'center' }}>
+          <Heading>Cảnh báo bảo mật hệ thống</Heading>
+          <Text>Loại cảnh báo: <b>{alertType}</b></Text>
+          <Text>Thời gian: {time}</Text>
+        </Section>
+        <Section>
+          <Text><b>Mô tả:</b> {description}</Text>
+        </Section>
+        <Hr />
+        <Section>
+          <Text style={{ fontSize: 12, color: '#888' }}>Vui lòng kiểm tra hệ thống và xử lý kịp thời.</Text>
+          <Text style={{ fontSize: 12, color: '#888' }}>Mọi thắc mắc liên hệ: support@sportstore.com</Text>
+        </Section>
+      </Container>
+    </Body>
+  </Html>
 );
 
 export default AdminSecurityAlertEmail; 

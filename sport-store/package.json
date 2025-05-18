@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "build:email-templates": "tsc --project src/email-templates/tsconfig.email.json && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/"
+    "build:email-templates": "tsc --project src/email-templates/tsconfig.email.json && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/",
+    "build:email-templates-esbuild": "npx esbuild src/email-templates/*.tsx --outdir=be-build-email-templates --bundle --platform=node --format=esm --jsx=automatic --target=node18 && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/ && rm -rf be-build-email-templates"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",
@@ -90,6 +91,7 @@
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.20",
+    "esbuild": "^0.25.4",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",

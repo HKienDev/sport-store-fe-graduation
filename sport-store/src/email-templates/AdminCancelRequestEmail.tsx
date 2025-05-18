@@ -1,26 +1,27 @@
 import { Html, Head, Preview, Body, Container, Section, Heading, Text, Hr } from '@react-email/components';
 import * as React from 'react';
 
-interface AdminPaymentErrorEmailProps {
+interface AdminCancelRequestEmailProps {
   orderId: string;
   customerName: string;
-  error: string;
+  reason: string;
   time: string;
 }
 
-const AdminPaymentErrorEmail: React.FC<AdminPaymentErrorEmailProps> = ({ orderId, customerName, error, time }) => (
+const AdminCancelRequestEmail: React.FC<AdminCancelRequestEmailProps> = ({ orderId, customerName, reason, time }) => (
   <Html>
     <Head />
-    <Preview>Lỗi thanh toán đơn hàng #{orderId}</Preview>
+    <Preview>Yêu cầu hủy đơn hàng #{orderId} từ khách hàng</Preview>
     <Body style={{ background: '#f9f9f9', fontFamily: 'Arial, sans-serif' }}>
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
-          <Heading>Lỗi thanh toán đơn hàng</Heading>
-          <Text>Đơn hàng <b>#{orderId}</b> của khách hàng <b>{customerName}</b> gặp lỗi khi thanh toán.</Text>
+          <Heading>Yêu cầu hủy đơn hàng</Heading>
+          <Text>Khách hàng <b>{customerName}</b> vừa gửi yêu cầu hủy đơn hàng.</Text>
         </Section>
         <Section>
-          <Text><b>Mô tả lỗi:</b> {error}</Text>
-          <Text><b>Thời gian:</b> {time}</Text>
+          <Text><b>Mã đơn hàng:</b> {orderId}</Text>
+          <Text><b>Lý do hủy:</b> {reason}</Text>
+          <Text><b>Thời gian yêu cầu:</b> {time}</Text>
         </Section>
         <Hr />
         <Section>
@@ -32,4 +33,4 @@ const AdminPaymentErrorEmail: React.FC<AdminPaymentErrorEmailProps> = ({ orderId
   </Html>
 );
 
-export default AdminPaymentErrorEmail; 
+export default AdminCancelRequestEmail; 
