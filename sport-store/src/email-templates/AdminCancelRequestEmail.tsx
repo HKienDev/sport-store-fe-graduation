@@ -16,12 +16,12 @@ const AdminCancelRequestEmail: React.FC<AdminCancelRequestEmailProps> = ({ order
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Yêu cầu hủy đơn hàng</Heading>
-          <Text>Khách hàng <b>{customerName}</b> vừa gửi yêu cầu hủy đơn hàng.</Text>
+          <Text>Khách hàng <Text style={{ fontWeight: 'bold', display: 'inline' }}>{customerName}</Text> vừa gửi yêu cầu hủy đơn hàng.</Text>
         </Section>
         <Section>
-          <Text><b>Mã đơn hàng:</b> {orderId}</Text>
-          <Text><b>Lý do hủy:</b> {reason}</Text>
-          <Text><b>Thời gian yêu cầu:</b> {time}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Mã đơn hàng:</Text> {orderId}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Lý do hủy:</Text> {reason}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Thời gian yêu cầu:</Text> {time}</Text>
         </Section>
         <Hr />
         <Section>

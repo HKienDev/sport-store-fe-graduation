@@ -16,11 +16,11 @@ const AdminPaymentErrorEmail: React.FC<AdminPaymentErrorEmailProps> = ({ orderId
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Lỗi thanh toán đơn hàng</Heading>
-          <Text>Đơn hàng <b>#{orderId}</b> của khách hàng <b>{customerName}</b> gặp lỗi khi thanh toán.</Text>
+          <Text>Đơn hàng <Text style={{ fontWeight: 'bold', display: 'inline' }}>#{orderId}</Text> của khách hàng <Text style={{ fontWeight: 'bold', display: 'inline' }}>{customerName}</Text> gặp lỗi khi thanh toán.</Text>
         </Section>
         <Section>
-          <Text><b>Mô tả lỗi:</b> {error}</Text>
-          <Text><b>Thời gian:</b> {time}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Mô tả lỗi:</Text> {error}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Thời gian:</Text> {time}</Text>
         </Section>
         <Hr />
         <Section>

@@ -44,7 +44,7 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
                 Thông tin tài khoản đã được cập nhật
               </Heading>
               <Text className="text-gray-600">
-                Xin chào <span className="font-semibold">{name}</span>,
+                Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
               <Text className="mt-2 text-gray-600">
                 Thông tin tài khoản của bạn tại Sport Store đã được cập nhật thành công vào lúc {time}.
@@ -56,33 +56,24 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
                 <Heading className="mb-4 text-lg font-semibold text-gray-900">
                   Thông tin đã cập nhật
                 </Heading>
-                
-                <table className="w-full">
-                  <tbody>
-                    {changes.map((change, index) => (
-                      <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-                        <td className="border-b border-gray-200 px-4 py-2 text-sm font-medium text-gray-600">
-                          {change.field}
-                        </td>
-                        <td className="border-b border-gray-200 px-4 py-2 text-sm text-gray-900">
-                          {change.value}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+                {changes.map((change, index) => (
+                  <Section key={index} style={{ background: index % 2 === 0 ? '#f9fafb' : '#fff', padding: 0 }}>
+                    <Text style={{ fontWeight: 'bold', display: 'inline', marginRight: 8 }}>{change.field}:</Text>
+                    <Text style={{ display: 'inline' }}>{change.value}</Text>
+                  </Section>
+                ))}
               </Section>
             ) : (
               <Section className="mt-8 rounded-lg bg-green-50 p-6">
                 <Text className="text-center text-green-700">
-                  <strong>Cập nhật thông tin thành công!</strong>
+                  <Text style={{ fontWeight: 'bold', display: 'inline' }}>Cập nhật thông tin thành công!</Text>
                 </Text>
               </Section>
             )}
 
             <Section className="mt-8 rounded-lg bg-yellow-50 p-4">
               <Text className="text-sm text-yellow-700">
-                <strong>Lưu ý bảo mật:</strong> Nếu bạn không thực hiện thay đổi này, vui lòng liên hệ ngay với chúng tôi.
+                <Text style={{ fontWeight: 'bold', display: 'inline' }}>Lưu ý bảo mật:</Text> Nếu bạn không thực hiện thay đổi này, vui lòng liên hệ ngay với chúng tôi.
               </Text>
             </Section>
 

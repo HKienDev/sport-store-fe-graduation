@@ -1,4 +1,4 @@
-import { Html, Head, Preview, Body, Container, Section, Heading, Text, Link, Hr } from '@react-email/components';
+import { Html, Head, Preview, Body, Container, Section, Heading, Text, Link, Hr, Row, Column } from '@react-email/components';
 import * as React from 'react';
 
 interface Product {
@@ -57,25 +57,21 @@ const AdminNewOrderEmail: React.FC<AdminNewOrderEmailProps> = ({
         </Section>
         <Hr />
         <Section>
-          <Text><b>Chi tiết đơn hàng:</b></Text>
-          <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: 8, marginBottom: 8 }}>
-            <thead>
-              <tr style={{ background: '#f3f4f6' }}>
-                <th style={{ padding: 8, border: '1px solid #eee', textAlign: 'left' }}>Sản phẩm</th>
-                <th style={{ padding: 8, border: '1px solid #eee', textAlign: 'center' }}>SL</th>
-                <th style={{ padding: 8, border: '1px solid #eee', textAlign: 'right' }}>Đơn giá</th>
-              </tr>
-            </thead>
-            <tbody>
-              {items.map((item, idx) => (
-                <tr key={idx}>
-                  <td style={{ padding: 8, border: '1px solid #eee' }}>{item.name}</td>
-                  <td style={{ padding: 8, border: '1px solid #eee', textAlign: 'center' }}>{item.quantity}</td>
-                  <td style={{ padding: 8, border: '1px solid #eee', textAlign: 'right' }}>{item.price.toLocaleString('vi-VN')}đ</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <Text style={{fontWeight: 'bold'}}>Chi tiết đơn hàng:</Text>
+          <Section>
+            <Row>
+              <Column><Text style={{fontWeight: 'bold', color: '#666'}}>Sản phẩm</Text></Column>
+              <Column><Text style={{fontWeight: 'bold', color: '#666', textAlign: 'center'}}>SL</Text></Column>
+              <Column><Text style={{fontWeight: 'bold', color: '#666', textAlign: 'right'}}>Đơn giá</Text></Column>
+            </Row>
+            {items.map((item, idx) => (
+              <Row key={idx}>
+                <Column><Text>{item.name}</Text></Column>
+                <Column><Text style={{textAlign: 'center'}}>{item.quantity}</Text></Column>
+                <Column><Text style={{textAlign: 'right'}}>{item.price.toLocaleString('vi-VN')}đ</Text></Column>
+              </Row>
+            ))}
+          </Section>
           <Text style={{ textAlign: 'right', fontWeight: 'bold', fontSize: 16, marginTop: 8 }}>
             Tổng thanh toán: {totalPrice.toLocaleString('vi-VN')}đ
           </Text>

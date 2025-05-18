@@ -15,11 +15,11 @@ const AdminSecurityAlertEmail: React.FC<AdminSecurityAlertEmailProps> = ({ alert
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Cảnh báo bảo mật hệ thống</Heading>
-          <Text>Loại cảnh báo: <b>{alertType}</b></Text>
+          <Text>Loại cảnh báo: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{alertType}</Text></Text>
           <Text>Thời gian: {time}</Text>
         </Section>
         <Section>
-          <Text><b>Mô tả:</b> {description}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Mô tả:</Text> {description}</Text>
         </Section>
         <Hr />
         <Section>

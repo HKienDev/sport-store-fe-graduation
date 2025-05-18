@@ -47,7 +47,7 @@ const RegisterConfirmation: React.FC<RegisterConfirmationProps> = ({
                 Chào mừng đến với Sport Store!
               </Heading>
               <Text className="text-gray-600">
-                Xin chào <span className="font-semibold">{fullname}</span>,
+                Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{fullname}</Text>,
               </Text>
               <Text className="mt-2 text-gray-600">
                 Chúng tôi rất vui mừng khi bạn đã tham gia cùng chúng tôi. Tài khoản của bạn đã được tạo thành công.
@@ -58,27 +58,14 @@ const RegisterConfirmation: React.FC<RegisterConfirmationProps> = ({
               <Heading className="mb-4 text-lg font-semibold text-blue-800">
                 Thông tin tài khoản của bạn
               </Heading>
-              <div className="rounded-lg bg-white p-4 shadow-sm">
-                <Text className="mb-2 text-sm font-medium text-gray-500">
-                  Mã khách hàng
-                </Text>
-                <Text className="mb-4 font-semibold text-gray-800">
-                  {customId}
-                </Text>
-                
-                <Text className="mb-2 text-sm font-medium text-gray-500">
-                  Email
-                </Text>
-                <Text className="font-semibold text-gray-800">
-                  {email}
-                </Text>
-                <Text className="mb-2 text-sm font-medium text-gray-500">
-                  Ngày đăng ký
-                </Text>
-                <Text className="mb-2 font-semibold text-gray-800">
-                  {registerDate}
-                </Text>
-              </div>
+              <Section style={{ background: '#fff', borderRadius: 8, padding: 16, boxShadow: '0 1px 4px #e5e7eb' }}>
+                <Text className="mb-2 text-sm font-medium text-gray-500">Mã khách hàng</Text>
+                <Text className="mb-4 font-semibold text-gray-800" style={{ fontWeight: 'bold' }}>{customId}</Text>
+                <Text className="mb-2 text-sm font-medium text-gray-500">Email</Text>
+                <Text className="font-semibold text-gray-800" style={{ fontWeight: 'bold' }}>{email}</Text>
+                <Text className="mb-2 text-sm font-medium text-gray-500">Ngày đăng ký</Text>
+                <Text className="mb-2 font-semibold text-gray-800" style={{ fontWeight: 'bold' }}>{registerDate}</Text>
+              </Section>
             </Section>
 
             <Section className="mt-8 text-center">

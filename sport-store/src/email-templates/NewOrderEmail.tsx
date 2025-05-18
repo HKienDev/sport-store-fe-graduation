@@ -116,57 +116,28 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
               <Heading className="mb-6 border-l-4 border-blue-500 pl-3 text-lg font-bold text-gray-900">
                 Chi tiết đơn hàng
               </Heading>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
-                    <tr className="bg-gray-100">
-                      <th className="p-4 text-left text-sm font-bold uppercase text-gray-600">
-                        Sản phẩm
-                      </th>
-                      <th className="p-4 text-center text-sm font-bold uppercase text-gray-600">
-                        Số lượng
-                      </th>
-                      <th className="p-4 text-right text-sm font-bold uppercase text-gray-600">
-                        Thành tiền
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {items.map((item, index) => (
-                      <tr
-                        key={index}
-                        className="border-b border-gray-200 transition-colors hover:bg-gray-50"
-                      >
-                        <td className="p-4">
-                          <div className="flex items-start gap-4">
-                            <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
-                              <Img
-                                src={item.image}
-                                alt={item.name}
-                                className="h-full w-full object-cover"
-                              />
-                            </div>
-                            <div>
-                              <Text className="font-semibold text-gray-900">
-                                {item.name}
-                              </Text>
-                              <Text className="mt-1 text-sm text-gray-500">
-                                {item.price} / sản phẩm
-                              </Text>
-                            </div>
-                          </div>
-                        </td>
-                        <td className="p-4 text-center font-medium text-gray-900">
-                          {item.quantity}
-                        </td>
-                        <td className="p-4 text-right font-semibold text-gray-900">
-                          {item.price}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              <Section>
+                <Row>
+                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666'}}>Sản phẩm</Text></Column>
+                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666', textAlign: 'center'}}>Số lượng</Text></Column>
+                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666', textAlign: 'right'}}>Thành tiền</Text></Column>
+                </Row>
+                {items.map((item, index) => (
+                  <Row key={index}>
+                    <Column>
+                      <Img src={item.image} alt={item.name} width="60" height="60" style={{borderRadius: 8, background: '#f3f4f6'}} />
+                      <Text style={{fontWeight: 'bold', color: '#222'}}>{item.name}</Text>
+                      <Text style={{fontSize: 12, color: '#888'}}>{item.price} / sản phẩm</Text>
+                    </Column>
+                    <Column>
+                      <Text style={{textAlign: 'center', fontWeight: 500}}>{item.quantity}</Text>
+                    </Column>
+                    <Column>
+                      <Text style={{textAlign: 'right', fontWeight: 'bold'}}>{item.price}</Text>
+                    </Column>
+                  </Row>
+                ))}
+              </Section>
             </Section>
 
             <Section className="mt-8 rounded-lg bg-gray-50 p-5">

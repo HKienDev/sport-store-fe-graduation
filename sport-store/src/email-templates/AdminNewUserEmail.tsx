@@ -15,8 +15,8 @@ const AdminNewUserEmail: React.FC<AdminNewUserEmailProps> = ({ userName, email, 
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Người dùng mới đăng ký</Heading>
-          <Text>Tên: <b>{userName}</b></Text>
-          <Text>Email: <b>{email}</b></Text>
+          <Text>Tên: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{userName}</Text></Text>
+          <Text>Email: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{email}</Text></Text>
           <Text>Thời gian đăng ký: {time}</Text>
         </Section>
         <Hr />

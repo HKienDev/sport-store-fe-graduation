@@ -42,7 +42,7 @@ const VerificationEmail: React.FC<VerificationEmailProps> = ({
                 Xác thực tài khoản
               </Heading>
               <Text className="text-gray-600">
-                Xin chào <span className="font-semibold">{name}</span>,
+                Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
               <Text className="mt-2 text-gray-600">
                 Cảm ơn bạn đã đăng ký tài khoản tại Sport Store. Vui lòng sử dụng mã OTP dưới đây để xác thực tài khoản của bạn.
@@ -50,21 +50,19 @@ const VerificationEmail: React.FC<VerificationEmailProps> = ({
             </Section>
 
             <Section className="mt-8 text-center">
-              <div
-                style={{
-                  borderRadius: '8px',
-                  background: '#f3f4f6',
-                  padding: '16px 0',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                  letterSpacing: '4px',
-                  display: 'inline-block',
-                  width: 'auto',
-                  margin: '0 auto'
-                }}
-              >
-                {otp}
-              </div>
+              <Section style={{
+                borderRadius: '8px',
+                background: '#f3f4f6',
+                padding: '16px 0',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                letterSpacing: '4px',
+                display: 'inline-block',
+                width: 'auto',
+                margin: '0 auto'
+              }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', letterSpacing: 4 }}>{otp}</Text>
+              </Section>
               <Text className="mt-4 text-sm text-gray-600">
                 Mã này sẽ hết hạn sau 10 phút.
               </Text>
@@ -72,7 +70,7 @@ const VerificationEmail: React.FC<VerificationEmailProps> = ({
 
             <Section className="mt-8 rounded-lg bg-yellow-50 p-4">
               <Text className="text-sm text-yellow-700">
-                <strong>Lưu ý:</strong> Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ với chúng tôi nếu bạn có bất kỳ thắc mắc nào.
+                <Text style={{ fontWeight: 'bold', display: 'inline' }}>Lưu ý:</Text> Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ với chúng tôi nếu bạn có bất kỳ thắc mắc nào.
               </Text>
             </Section>
 

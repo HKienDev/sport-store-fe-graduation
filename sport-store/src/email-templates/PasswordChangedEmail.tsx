@@ -42,7 +42,7 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
                 Mật khẩu đã được thay đổi
               </Heading>
               <Text className="text-gray-600">
-                Xin chào <span className="font-semibold">{name}</span>,
+                Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
               <Text className="mt-2 text-gray-600">
                 Chúng tôi xác nhận rằng mật khẩu tài khoản Sport Store của bạn đã được thay đổi thành công vào lúc {time}.
@@ -51,7 +51,7 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
 
             <Section className="mt-8 rounded-lg bg-green-50 p-6">
               <Text className="text-center text-green-700">
-                <strong>Thay đổi mật khẩu thành công!</strong>
+                <Text style={{ fontWeight: 'bold', display: 'inline' }}>Thay đổi mật khẩu thành công!</Text>
               </Text>
               <Text className="mt-2 text-center text-sm text-green-700">
                 Bây giờ bạn có thể đăng nhập bằng mật khẩu mới của mình.
@@ -60,7 +60,7 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
 
             <Section className="mt-8 rounded-lg bg-blue-50 p-4">
               <Text className="text-sm text-blue-700">
-                <strong>Lời khuyên bảo mật:</strong> Luôn chọn mật khẩu mạnh và không sử dụng lại mật khẩu trên nhiều trang web khác nhau.
+                <Text style={{ fontWeight: 'bold', display: 'inline' }}>Lời khuyên bảo mật:</Text> Luôn chọn mật khẩu mạnh và không sử dụng lại mật khẩu trên nhiều trang web khác nhau.
               </Text>
             </Section>
 

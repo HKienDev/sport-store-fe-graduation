@@ -16,8 +16,8 @@ const AdminCouponUsedEmail: React.FC<AdminCouponUsedEmailProps> = ({ couponCode,
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Mã giảm giá đã được sử dụng</Heading>
-          <Text>Mã coupon: <b>{couponCode}</b></Text>
-          <Text>Khách hàng: <b>{customerName}</b></Text>
+          <Text>Mã coupon: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{couponCode}</Text></Text>
+          <Text>Khách hàng: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{customerName}</Text></Text>
           <Text>Đơn hàng liên quan: {orderId}</Text>
           <Text>Thời gian sử dụng: {time}</Text>
         </Section>

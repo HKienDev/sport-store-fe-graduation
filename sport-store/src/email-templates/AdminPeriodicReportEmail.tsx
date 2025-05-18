@@ -15,11 +15,11 @@ const AdminPeriodicReportEmail: React.FC<AdminPeriodicReportEmailProps> = ({ rep
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Báo cáo định kỳ hệ thống</Heading>
-          <Text>Loại báo cáo: <b>{reportType}</b></Text>
+          <Text>Loại báo cáo: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{reportType}</Text></Text>
           <Text>Thời gian: {time}</Text>
         </Section>
         <Section>
-          <Text><b>Mô tả:</b> {description}</Text>
+          <Text><Text style={{ fontWeight: 'bold', display: 'inline' }}>Mô tả:</Text> {description}</Text>
         </Section>
         <Hr />
         <Section>

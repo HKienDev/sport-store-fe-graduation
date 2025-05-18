@@ -42,7 +42,7 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
                 Yêu cầu đặt lại mật khẩu
               </Heading>
               <Text className="text-gray-600">
-                Xin chào <span className="font-semibold">{name}</span>,
+                Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
               <Text className="mt-2 text-gray-600">
                 Chúng tôi đã nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn. Vui lòng sử dụng mã OTP dưới đây để hoàn tất quá trình đặt lại mật khẩu.
@@ -50,21 +50,19 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
             </Section>
 
             <Section className="mt-8 text-center">
-              <div
-                style={{
-                  borderRadius: '8px',
-                  background: '#f3f4f6',
-                  padding: '16px 0',
-                  fontSize: '24px',
-                  fontWeight: 'bold',
-                  letterSpacing: '4px',
-                  display: 'inline-block',
-                  width: 'auto',
-                  margin: '0 auto'
-                }}
-              >
-                {otp}
-              </div>
+              <Section style={{
+                borderRadius: '8px',
+                background: '#f3f4f6',
+                padding: '16px 0',
+                fontSize: '24px',
+                fontWeight: 'bold',
+                letterSpacing: '4px',
+                display: 'inline-block',
+                width: 'auto',
+                margin: '0 auto'
+              }}>
+                <Text style={{ fontSize: 24, fontWeight: 'bold', letterSpacing: 4 }}>{otp}</Text>
+              </Section>
               <Text className="mt-4 text-sm text-gray-600">
                 Mã này sẽ hết hạn sau 10 phút.
               </Text>
@@ -72,7 +70,7 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
 
             <Section className="mt-8 rounded-lg bg-red-50 p-4">
               <Text className="text-sm text-red-700">
-                <strong>Cảnh báo bảo mật:</strong> Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này và xem xét việc đổi mật khẩu tài khoản của bạn ngay lập tức.
+                <Text style={{ fontWeight: 'bold', display: 'inline' }}>Cảnh báo bảo mật:</Text> Nếu bạn không yêu cầu đặt lại mật khẩu, hãy bỏ qua email này và xem xét việc đổi mật khẩu tài khoản của bạn ngay lập tức.
               </Text>
             </Section>
 

@@ -16,8 +16,8 @@ const AdminProductLowStockEmail: React.FC<AdminProductLowStockEmailProps> = ({ p
       <Container style={{ maxWidth: 600, margin: '0 auto', background: '#fff', borderRadius: 8, padding: 24 }}>
         <Section style={{ textAlign: 'center' }}>
           <Heading>Cảnh báo sản phẩm sắp hết hàng</Heading>
-          <Text>Sản phẩm: <b>{productName}</b> (Mã: {productId})</Text>
-          <Text>Số lượng còn lại: <b>{quantity}</b></Text>
+          <Text>Sản phẩm: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{productName}</Text> (Mã: {productId})</Text>
+          <Text>Số lượng còn lại: <Text style={{ fontWeight: 'bold', display: 'inline' }}>{quantity}</Text></Text>
           <Text>Thời gian cảnh báo: {time}</Text>
         </Section>
         <Hr />

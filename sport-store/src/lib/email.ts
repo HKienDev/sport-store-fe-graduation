@@ -53,4 +53,29 @@ export const sendEmailFromTemplate = async ({ to, subject, template: Template, t
     console.error('=== END DEBUG ===\n');
     throw new Error(error instanceof Error ? error.message : 'Có lỗi xảy ra khi gửi email');
   }
+};
+
+// Hàm gửi email admin (không cần to, gửi mặc định cho admin)
+interface SendAdminEmailParams {
+  subject: string;
+  template: React.ComponentType<any>;
+  templateProps: any;
+}
+
+export const sendAdminEmailFromTemplate = async ({ subject, template: Template, templateProps }: SendAdminEmailParams) => {
+  const html = await render(React.createElement(Template, templateProps));
+  const response = await axios.post(
+    `${API_URL}/api/email/send-admin`,
+    {
+      subject,
+      html
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    }
+  );
+  return response.data;
 }; 
