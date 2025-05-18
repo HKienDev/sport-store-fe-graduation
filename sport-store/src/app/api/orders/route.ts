@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
-import { sendEmailFromTemplate } from '@/lib/email';
+import { sendEmailFromTemplate, sendAdminEmailFromTemplate } from '@/lib/email';
 import { NewOrderEmail } from '@/components/emails/NewOrderEmail';
+import AdminNewOrderEmail from '@/email-templates/AdminNewOrderEmail';
 
 interface OrderEmailProps {
   order: {
@@ -33,12 +34,27 @@ export async function POST(request: Request) {
   try {
     const orderData = await request.json();
 
-    // Gửi email xác nhận đơn hàng
+    // Gửi email xác nhận đơn hàng cho user
     await sendEmailFromTemplate({
       to: orderData.shippingAddress.email,
       subject: `Xác nhận đơn hàng #${orderData.shortId}`,
       template: NewOrderEmail,
       templateProps: orderData as OrderEmailProps["order"]
+    });
+
+    // Gửi email thông báo cho admin
+    await sendAdminEmailFromTemplate({
+      subject: `Có đơn hàng mới #${orderData.shortId}`,
+      template: AdminNewOrderEmail,
+      templateProps: {
+        shortId: orderData.shortId,
+        createdAt: orderData.createdAt,
+        shippingAddress: orderData.shippingAddress,
+        items: orderData.items,
+        totalPrice: orderData.totalPrice,
+        paymentMethod: orderData.paymentMethod,
+        paymentStatus: orderData.paymentStatus,
+      }
     });
 
     return NextResponse.json({ 

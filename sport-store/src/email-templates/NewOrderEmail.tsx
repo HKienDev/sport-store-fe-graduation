@@ -9,7 +9,6 @@ import {
   Section,
   Text,
   Link,
-  Hr,
 } from '@react-email/components';
 import * as React from 'react';
 
