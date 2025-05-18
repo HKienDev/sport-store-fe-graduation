@@ -5,6 +5,7 @@ import ProfileUser from "@/components/user/profileUser/userProfileForm";
 import OrderUserPage from "@/components/user/orderUser/orderUserPage";
 import { useSearchParams, useRouter } from 'next/navigation';
 import { API_URL } from '@/utils/api';
+import { useAuth } from '@/context/authContext';
 
 function ProfilePageContent() {
   const [scrolled, setScrolled] = useState(false);
@@ -12,6 +13,7 @@ function ProfilePageContent() {
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam === 'orders' ? 'orders' : 'profile');
   const router = useRouter();
+  const { user, loading } = useAuth();
 
   // Handle scroll effect for the sticky header
   useEffect(() => {
@@ -31,27 +33,11 @@ function ProfilePageContent() {
   }, [tabParam]);
 
   useEffect(() => {
-    let isMounted = true;
-    // Fetch profile để kiểm tra role
-    const fetchProfile = async () => {
-      try {
-        const res = await fetch(`${API_URL}/auth/profile`, {
-          credentials: 'include',
-        });
-        const data = await res.json();
-        if (!isMounted) return;
-        if (!data?.success || !data?.data) {
-          router.replace('/auth/login');
-        } else if (data.data.role === 'admin') {
-          router.replace('/admin/dashboard');
-        }
-      } catch {
-        if (isMounted) router.replace('/auth/login');
-      }
-    };
-    fetchProfile();
-    return () => { isMounted = false; };
-  }, [router]);
+    if (!loading) {
+      if (!user) router.replace('/auth/login');
+      else if (user.role === 'admin') router.replace('/admin/dashboard');
+    }
+  }, [loading, user, router]);
 
   return (
     <div className="min-h-screen bg-gray-50">

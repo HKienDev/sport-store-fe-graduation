@@ -10,10 +10,10 @@ import { Toaster } from "@/components/ui/toast";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
-  fontClass: string;
+  // fontClass: string; // Xóa nếu không dùng
 }
 
-export default function ClientLayout({ children, fontClass }: ClientLayoutProps) {
+export default function ClientLayout({ children }: ClientLayoutProps) {
   return (
     <AuthProvider>
       <CartProvider>

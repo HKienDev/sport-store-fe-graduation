@@ -27,7 +27,7 @@ export default function RootLayout({
         <link rel="icon" href="/vju-logo-main.png" type="image/png" />
       </head>
       <body className={`${montserrat.variable} font-sans min-h-screen bg-background antialiased`}>
-        <ClientLayout fontClass={montserrat.variable}>
+        <ClientLayout>
                     {children}
         </ClientLayout>
         <SpeedInsights />
