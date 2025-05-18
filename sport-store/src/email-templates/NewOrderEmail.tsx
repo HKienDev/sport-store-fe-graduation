@@ -8,12 +8,9 @@ import {
   Preview,
   Section,
   Text,
-  Row,
-  Column,
   Link,
   Hr,
 } from '@react-email/components';
-import { Tailwind } from '@react-email/tailwind';
 import * as React from 'react';
 
 interface NewOrderEmailProduct {
@@ -58,236 +55,155 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
     <Html>
       <Head />
       <Preview>Xác nhận đơn hàng #{shortId} từ Sport Store</Preview>
-      <Tailwind>
-        <Body className="bg-gray-100 font-sans">
-          <Container className="mx-auto my-10 max-w-[650px] rounded-lg bg-white p-8 shadow-lg">
-            <Section className="text-center">
-              <Img
-                src="https://sport-store.vercel.app/vju-logo-main.png"
-                width="160"
-                height="auto"
-                alt="Sport Store Logo"
-                className="mx-auto mb-7"
-              />
-              <Heading className="text-2xl font-bold text-gray-900">
-                Xin chào {fullName}!
-              </Heading>
-              <Text className="text-gray-600">
-                Cảm ơn bạn đã đặt hàng tại{' '}
-                <span className="font-semibold text-blue-600">Sport Store</span>
-              </Text>
-              <Text className="mt-2 text-sm text-gray-500">
-                Chúng tôi đã nhận được đơn hàng của bạn và đang xử lý.
-              </Text>
-            </Section>
+      <Body style={{ background: '#f4f7fa', fontFamily: 'Arial, sans-serif', margin: 0, padding: 0 }}>
+        <Container style={{ maxWidth: 650, margin: '32px auto', background: '#fff', borderRadius: 12, boxShadow: '0 4px 24px #e0e7ef', padding: 0, overflow: 'hidden' }}>
+          {/* Header với background gradient và logo */}
+          <Section style={{ background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)', padding: '32px 0 16px 0', textAlign: 'center' }}>
+            <Img
+              src="https://sport-store.vercel.app/vju-logo-main.png"
+              width="160"
+              height="auto"
+              alt="Sport Store Logo"
+              style={{ margin: '0 auto 12px auto', display: 'block' }}
+            />
+            <Heading style={{ color: '#fff', fontSize: 28, fontWeight: 700, margin: 0, letterSpacing: 1 }}>
+              Cảm ơn bạn đã đặt hàng!
+            </Heading>
+            <Text style={{ color: '#e0e7ef', fontSize: 16, margin: '8px 0 0 0' }}>
+              Xin chào <b>{fullName}</b>, đơn hàng của bạn đã được ghi nhận.
+            </Text>
+          </Section>
 
-            <Section className="mt-8 rounded-lg bg-blue-50 p-4">
-              <Row>
-                <Column>
-                  <Text className="text-xs uppercase text-blue-600">
-                    Mã đơn hàng
-                  </Text>
-                  <Text className="text-lg font-semibold text-blue-800">
-                    #{shortId}
-                  </Text>
-                </Column>
-                <Column>
-                  <Text className="text-xs uppercase text-blue-600">
-                    Ngày đặt hàng
-                  </Text>
-                  <Text className="text-lg font-medium text-blue-800">
-                    {createdAt}
-                  </Text>
-                </Column>
-                <Column>
-                  <Text className="text-xs uppercase text-blue-600">
-                    Dự kiến giao
-                  </Text>
-                  <Text className="text-lg font-medium text-blue-800">
-                    {deliveryDate}
-                  </Text>
-                </Column>
-              </Row>
-            </Section>
+          {/* Thông tin đơn hàng tổng quan */}
+          <Section style={{ padding: '24px 32px 0 32px', textAlign: 'center' }}>
+            <table style={{ width: '100%', margin: '0 auto', borderCollapse: 'collapse' }}>
+              <tbody>
+                <tr>
+                  <td style={orderInfoLabel}>Mã đơn hàng</td>
+                  <td style={orderInfoValue}>#{shortId}</td>
+                  <td style={orderInfoLabel}>Ngày đặt</td>
+                  <td style={orderInfoValue}>{createdAt}</td>
+                  <td style={orderInfoLabel}>Dự kiến giao</td>
+                  <td style={orderInfoValue}>{deliveryDate}</td>
+                </tr>
+              </tbody>
+            </table>
+          </Section>
 
-            <Hr style={hr} />
-
-            <Section className="mt-8">
-              <Heading className="mb-6 border-l-4 border-blue-500 pl-3 text-lg font-bold text-gray-900">
-                Chi tiết đơn hàng
-              </Heading>
-              <Section>
-                <Row>
-                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666'}}>Sản phẩm</Text></Column>
-                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666', textAlign: 'center'}}>Số lượng</Text></Column>
-                  <Column><Text style={{fontWeight: 'bold', textTransform: 'uppercase', color: '#666', textAlign: 'right'}}>Thành tiền</Text></Column>
-                </Row>
-                {items.map((item, index) => (
-                  <Row key={index}>
-                    <Column>
-                      <Img src={item.image} alt={item.name} width="60" height="60" style={{borderRadius: 8, background: '#f3f4f6'}} />
-                      <Text style={{fontWeight: 'bold', color: '#222'}}>{item.name}</Text>
-                      <Text style={{fontSize: 12, color: '#888'}}>{item.price} / sản phẩm</Text>
-                    </Column>
-                    <Column>
-                      <Text style={{textAlign: 'center', fontWeight: 500}}>{item.quantity}</Text>
-                    </Column>
-                    <Column>
-                      <Text style={{textAlign: 'right', fontWeight: 'bold'}}>{item.price}</Text>
-                    </Column>
-                  </Row>
+          {/* Bảng sản phẩm */}
+          <Section style={{ padding: '24px 32px 0 32px' }}>
+            <Heading style={{ fontSize: 18, color: '#222', fontWeight: 700, margin: '0 0 12px 0', borderLeft: '4px solid #2563eb', paddingLeft: 12 }}>
+              Chi tiết đơn hàng
+            </Heading>
+            <table style={productTable}>
+              <thead>
+                <tr>
+                  <th style={thStyle}>Sản phẩm</th>
+                  <th style={thStyle}>Số lượng</th>
+                  <th style={thStyle}>Thành tiền</th>
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item, idx) => (
+                  <tr key={idx} style={idx % 2 === 0 ? rowEven : rowOdd}>
+                    <td style={{ ...tdStyle, minWidth: 180 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <Img src={item.image} alt={item.name} width="48" height="48" style={{ borderRadius: 8, background: '#f3f4f6', marginRight: 8 }} />
+                        <div>
+                          <div style={{ fontWeight: 600, color: '#222', fontSize: 15 }}>{item.name}</div>
+                          <div style={{ fontSize: 12, color: '#888' }}>{item.price} / sản phẩm</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td style={{ ...tdStyle, textAlign: 'center', fontWeight: 500 }}>{item.quantity}</td>
+                    <td style={{ ...tdStyle, textAlign: 'right', fontWeight: 700 }}>{item.price}</td>
+                  </tr>
                 ))}
-              </Section>
-            </Section>
+              </tbody>
+            </table>
+          </Section>
 
-            <Section className="mt-8 rounded-lg bg-gray-50 p-5">
-              <Row>
-                <Column>
-                  <Text className="text-sm text-gray-600">Tổng tiền hàng:</Text>
-                </Column>
-                <Column align="right">
-                  <Text className="text-sm font-medium text-gray-900">
-                    {subtotal}
-                  </Text>
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  <Text className="text-sm text-gray-600">Giảm giá trực tiếp:</Text>
-                </Column>
-                <Column align="right">
-                  <Text className="text-sm font-medium text-red-600">
-                    -{directDiscount}
-                  </Text>
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  <Text className="text-sm text-gray-600">Mã giảm giá:</Text>
-                </Column>
-                <Column align="right">
-                  <Text className="text-sm font-medium text-red-600">
-                    -{couponDiscount}
-                  </Text>
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  <Text className="text-sm text-gray-600">Phí vận chuyển:</Text>
-                </Column>
-                <Column align="right">
-                  <Text className="text-sm font-medium text-gray-900">
-                    {shippingFee}
-                  </Text>
-                </Column>
-              </Row>
-              <Row>
-                <Column>
-                  <Text className="text-base font-bold text-gray-900">Tổng thanh toán:</Text>
-                </Column>
-                <Column align="right">
-                  <Text className="text-lg font-bold text-blue-600">
-                    {totalPrice}
-                  </Text>
-                </Column>
-              </Row>
-            </Section>
+          {/* Tổng kết đơn hàng */}
+          <Section style={{ padding: '24px 32px 0 32px' }}>
+            <table style={{ width: '100%', background: '#f1f5f9', borderRadius: 8, padding: 16, margin: '0 0 8px 0' }}>
+              <tbody>
+                <tr>
+                  <td style={summaryLabel}>Tổng tiền hàng:</td>
+                  <td style={summaryValue}>{subtotal}</td>
+                </tr>
+                <tr>
+                  <td style={summaryLabel}>Giảm giá trực tiếp:</td>
+                  <td style={{ ...summaryValue, color: '#ef4444' }}>-{directDiscount}</td>
+                </tr>
+                <tr>
+                  <td style={summaryLabel}>Mã giảm giá:</td>
+                  <td style={{ ...summaryValue, color: '#ef4444' }}>-{couponDiscount}</td>
+                </tr>
+                <tr>
+                  <td style={summaryLabel}>Phí vận chuyển:</td>
+                  <td style={summaryValue}>{shippingFee}</td>
+                </tr>
+                <tr>
+                  <td style={{ ...summaryLabel, fontWeight: 700, fontSize: 16 }}>Tổng thanh toán:</td>
+                  <td style={{ ...summaryValue, color: '#2563eb', fontWeight: 700, fontSize: 18 }}>{totalPrice}</td>
+                </tr>
+              </tbody>
+            </table>
+          </Section>
 
-            <Hr style={hr} />
+          {/* Thông tin giao hàng */}
+          <Section style={{ padding: '24px 32px 0 32px' }}>
+            <Heading style={{ fontSize: 16, color: '#222', fontWeight: 700, margin: '0 0 8px 0' }}>
+              Thông tin giao hàng
+            </Heading>
+            <Text style={{ color: '#444', fontSize: 15 }}>{shippingAddress}</Text>
+          </Section>
 
-            <Section className="mt-8">
-              <Heading className="mb-4 text-lg font-semibold text-gray-900">
-                Thông tin giao hàng
-              </Heading>
-              <Text className="text-gray-700">
-                {shippingAddress}
-              </Text>
-            </Section>
+          {/* Phương thức thanh toán */}
+          <Section style={{ padding: '24px 32px 0 32px' }}>
+            <Heading style={{ fontSize: 16, color: '#222', fontWeight: 700, margin: '0 0 8px 0' }}>
+              Phương thức thanh toán
+            </Heading>
+            <Text style={{ color: '#444', fontSize: 15 }}>{paymentMethod}</Text>
+            <Text style={{ color: '#444', fontSize: 15 }}>Trạng thái: {paymentStatus}</Text>
+          </Section>
 
-            <Section className="mt-8">
-              <Heading className="mb-4 text-lg font-semibold text-gray-900">
-                Phương thức thanh toán
-              </Heading>
-              <Text className="text-gray-700">
-                {paymentMethod}
-              </Text>
-              <Text className="text-gray-700">
-                Trạng thái: {paymentStatus}
-              </Text>
-            </Section>
+          {/* Nút CTA */}
+          <Section style={{ textAlign: 'center', padding: '32px 0 0 0' }}>
+            <Link
+              href={`https://sport-store.vercel.app/orders/${shortId}`}
+              style={{ display: 'inline-block', background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)', color: '#fff', padding: '14px 40px', borderRadius: 32, fontWeight: 700, fontSize: 16, textDecoration: 'none', boxShadow: '0 2px 8px #dbeafe', margin: '0 auto' }}
+            >
+              Xem chi tiết đơn hàng
+            </Link>
+          </Section>
 
-            <Section className="mt-8 text-center">
-              <Link
-                href={`https://sport-store.vercel.app/orders/${shortId}`}
-                className="inline-block rounded-full bg-blue-600 px-8 py-3 text-white shadow-lg transition-colors hover:bg-blue-700"
-              >
-                Xem chi tiết đơn hàng
-              </Link>
-            </Section>
-
-            <Section className="mt-8 rounded-lg bg-gray-50 p-6 text-center">
-              <Heading className="mb-4 text-lg font-semibold text-gray-900">
-                Hỗ trợ khách hàng
-              </Heading>
-              <div className="flex flex-col items-center gap-3">
-                <div className="flex items-center">
-                  <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                    <svg
-                      className="h-4 w-4 text-blue-500"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <Link
-                    href="mailto:support@sportstore.com"
-                    className="text-blue-500"
-                  >
-                    support@sportstore.com
-                  </Link>
-                </div>
-                <div className="flex items-center">
-                  <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
-                    <svg
-                      className="h-4 w-4 text-blue-500"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path d="M3 5.5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5.5z" />
-                    </svg>
-                  </div>
-                  <Link href="tel:0362195258" className="text-blue-500">
-                    0362195258
-                  </Link>
-                </div>
-              </div>
-            </Section>
-
-            <Section className="mt-8 text-center">
-              <Text className="text-sm text-gray-500">
-                © 2025 Sport Store. Tất cả các quyền được bảo lưu.
-              </Text>
-              <Text className="mt-1 text-xs text-gray-500">
-                Email này được gửi tự động, vui lòng không trả lời.
-              </Text>
-            </Section>
-          </Container>
-        </Body>
-      </Tailwind>
+          {/* Footer */}
+          <Section style={{ background: '#f1f5f9', marginTop: 32, padding: '32px 0 0 0', textAlign: 'center', borderTop: '1px solid #e5e7eb' }}>
+            <Text style={{ color: '#64748b', fontSize: 14, margin: 0 }}>
+              Mọi thắc mắc vui lòng liên hệ <Link href="mailto:support@sportstore.com" style={{ color: '#2563eb', textDecoration: 'underline' }}>support@sportstore.com</Link> hoặc <Link href="tel:0362195258" style={{ color: '#2563eb', textDecoration: 'underline' }}>0362195258</Link>
+            </Text>
+            <Text style={{ color: '#94a3b8', fontSize: 12, margin: '8px 0 0 0' }}>
+              © 2025 Sport Store. Tất cả các quyền được bảo lưu.<br />Email này được gửi tự động, vui lòng không trả lời.
+            </Text>
+          </Section>
+        </Container>
+      </Body>
     </Html>
   );
 };
 
 export default NewOrderEmail;
 
-const hr = {
-  borderColor: '#e6ebf1',
-  margin: '20px 0',
-};
+// Style constants
+const orderInfoLabel = { color: '#2563eb', fontWeight: 600, fontSize: 13, padding: '4px 8px', textTransform: 'uppercase', letterSpacing: 0.5 };
+const orderInfoValue = { color: '#222', fontWeight: 700, fontSize: 15, padding: '4px 8px' };
+const productTable = { width: '100%', borderCollapse: 'collapse', background: '#fff', borderRadius: 8, overflow: 'hidden', marginBottom: 8 };
+const thStyle = { background: '#f1f5f9', color: '#2563eb', fontWeight: 700, fontSize: 13, padding: '10px 8px', borderBottom: '2px solid #e5e7eb', textAlign: 'left' };
+const tdStyle = { padding: '10px 8px', borderBottom: '1px solid #e5e7eb', fontSize: 14, color: '#222', background: '#fff' };
+const rowEven = { background: '#f8fafc' };
+const rowOdd = { background: '#fff' };
+const summaryLabel = { color: '#64748b', fontWeight: 500, fontSize: 14, padding: '6px 0' };
+const summaryValue = { color: '#222', fontWeight: 600, fontSize: 15, textAlign: 'right', padding: '6px 0' };
 
 export type { NewOrderEmailProps }; 
