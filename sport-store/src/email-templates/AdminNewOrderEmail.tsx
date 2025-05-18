@@ -26,6 +26,13 @@ interface AdminNewOrderEmailProps {
   paymentStatus: string;
 }
 
+// Hàm chuyển đổi sang giờ Việt Nam
+const toVNTimeString = (dateStr: string | Date) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+};
+
 const AdminNewOrderEmail: React.FC<AdminNewOrderEmailProps> = ({
   shortId,
   createdAt,
@@ -56,7 +63,7 @@ const AdminNewOrderEmail: React.FC<AdminNewOrderEmailProps> = ({
             <b>{shippingAddress.fullName}</b> vừa đặt đơn hàng #{shortId}
           </Text>
           <Text style={{ color: '#e0e7ef', fontSize: 14, margin: '4px 0 0 0' }}>
-            Thời gian đặt: {typeof createdAt === 'string' ? createdAt : new Date(createdAt).toLocaleString('vi-VN')}
+            Thời gian đặt: {toVNTimeString(createdAt)}
           </Text>
         </Section>
 

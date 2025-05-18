@@ -36,6 +36,13 @@ interface NewOrderEmailProps {
   paymentStatus: string;
 }
 
+// Hàm chuyển đổi sang giờ Việt Nam
+const toVNTimeString = (dateStr: string) => {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  return date.toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
+};
+
 const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
   shortId,
   fullName,
@@ -82,9 +89,9 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
                   <td style={orderInfoLabel}>Mã đơn hàng</td>
                   <td style={orderInfoValue}>#{shortId}</td>
                   <td style={orderInfoLabel}>Ngày đặt</td>
-                  <td style={orderInfoValue}>{createdAt}</td>
+                  <td style={orderInfoValue}>{toVNTimeString(createdAt)}</td>
                   <td style={orderInfoLabel}>Dự kiến giao</td>
-                  <td style={orderInfoValue}>{deliveryDate}</td>
+                  <td style={orderInfoValue}>{toVNTimeString(deliveryDate)}</td>
                 </tr>
               </tbody>
             </table>
