@@ -32,17 +32,17 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto my-10 max-w-[600px] rounded-lg bg-white p-8 shadow-lg">
-            <Section className="text-center">
+            <Section style={{ background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)', borderRadius: 12, padding: '24px 0 12px 0', marginBottom: 24 }}>
               <Img
                 src="https://sport-store.vercel.app/vju-logo-main.png"
                 width="160"
                 height="auto"
                 alt="Sport Store Logo"
-                className="mx-auto mb-6"
+                className="mx-auto mb-2"
               />
-              <Heading className="text-2xl font-bold text-gray-900">
-                Thông tin tài khoản đã được cập nhật
-              </Heading>
+              <Heading style={{ color: '#fff', fontWeight: 700, fontSize: 26, margin: 0 }}>Thông tin tài khoản đã được cập nhật</Heading>
+            </Section>
+            <Section className="text-center">
               <Text className="text-gray-600">
                 Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
@@ -52,10 +52,8 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
             </Section>
 
             {changes.length > 0 ? (
-              <Section className="mt-8 rounded-lg border border-gray-200 bg-white p-6">
-                <Heading className="mb-4 text-lg font-semibold text-gray-900">
-                  Thông tin đã cập nhật
-                </Heading>
+              <Section className="mt-8" style={{ border: '2px solid #2563eb', borderRadius: 10, boxShadow: '0 2px 8px 0 #2563eb22', background: '#f3f4f6', padding: 20 }}>
+                <Heading style={{ color: '#2563eb', fontWeight: 600, fontSize: 18, marginBottom: 12 }}>Thông tin đã cập nhật</Heading>
                 {changes.map((change, index) => (
                   <Section key={index} style={{ background: index % 2 === 0 ? '#f9fafb' : '#fff', padding: 0 }}>
                     <Text style={{ fontWeight: 'bold', display: 'inline', marginRight: 8 }}>{change.field}:</Text>
@@ -64,7 +62,7 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
                 ))}
               </Section>
             ) : (
-              <Section className="mt-8 rounded-lg bg-green-50 p-6">
+              <Section className="mt-8 rounded-lg bg-green-50 p-6" style={{ border: '2px solid #22c55e', boxShadow: '0 2px 8px 0 #22c55e22' }}>
                 <Text className="text-center text-green-700">
                   <Text style={{ fontWeight: 'bold', display: 'inline' }}>Cập nhật thông tin thành công!</Text>
                 </Text>
@@ -80,7 +78,18 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
             <Section className="mt-8 text-center">
               <Link 
                 href="https://sport-store.vercel.app/user/profile" 
-                className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-center font-medium text-white shadow-sm hover:bg-blue-700"
+                style={{
+                  display: 'inline-block',
+                  borderRadius: 8,
+                  background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+                  padding: '14px 36px',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  color: '#fff',
+                  boxShadow: '0 2px 8px 0 #2563eb22',
+                  textDecoration: 'none',
+                  margin: '0 auto'
+                }}
               >
                 Xem tài khoản của tôi
               </Link>
@@ -89,7 +98,7 @@ const ProfileUpdateEmail: React.FC<ProfileUpdateEmailProps> = ({
               </Text>
             </Section>
 
-            <Hr className="my-8 border-gray-200" />
+            <Hr style={{ borderTop: '1.5px solid #e5e7eb', margin: '32px 0 16px 0' }} />
 
             <Section className="text-center">
               <Text className="text-xs text-gray-500">

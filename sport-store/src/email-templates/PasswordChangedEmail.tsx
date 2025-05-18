@@ -30,17 +30,17 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto my-10 max-w-[600px] rounded-lg bg-white p-8 shadow-lg">
-            <Section className="text-center">
+            <Section style={{ background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)', borderRadius: 12, padding: '24px 0 12px 0', marginBottom: 24 }}>
               <Img
                 src="https://sport-store.vercel.app/vju-logo-main.png"
                 width="160"
                 height="auto"
                 alt="Sport Store Logo"
-                className="mx-auto mb-6"
+                className="mx-auto mb-2"
               />
-              <Heading className="text-2xl font-bold text-gray-900">
-                Mật khẩu đã được thay đổi
-              </Heading>
+              <Heading style={{ color: '#fff', fontWeight: 700, fontSize: 26, margin: 0 }}>Mật khẩu đã được thay đổi</Heading>
+            </Section>
+            <Section className="text-center">
               <Text className="text-gray-600">
                 Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
@@ -49,7 +49,7 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
               </Text>
             </Section>
 
-            <Section className="mt-8 rounded-lg bg-green-50 p-6">
+            <Section className="mt-8 rounded-lg bg-green-50 p-6" style={{ border: '2px solid #22c55e', boxShadow: '0 2px 8px 0 #22c55e22' }}>
               <Text className="text-center text-green-700">
                 <Text style={{ fontWeight: 'bold', display: 'inline' }}>Thay đổi mật khẩu thành công!</Text>
               </Text>
@@ -67,7 +67,18 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
             <Section className="mt-8 text-center">
               <Link 
                 href="https://sport-store.vercel.app/auth/login" 
-                className="inline-block rounded-lg bg-blue-600 px-6 py-3 text-center font-medium text-white shadow-sm hover:bg-blue-700"
+                style={{
+                  display: 'inline-block',
+                  borderRadius: 8,
+                  background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)',
+                  padding: '14px 36px',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  color: '#fff',
+                  boxShadow: '0 2px 8px 0 #2563eb22',
+                  textDecoration: 'none',
+                  margin: '0 auto'
+                }}
               >
                 Đăng nhập ngay
               </Link>
@@ -76,7 +87,7 @@ const PasswordChangedEmail: React.FC<PasswordChangedEmailProps> = ({
               </Text>
             </Section>
 
-            <Hr className="my-8 border-gray-200" />
+            <Hr style={{ borderTop: '1.5px solid #e5e7eb', margin: '32px 0 16px 0' }} />
 
             <Section className="text-center">
               <Text className="text-xs text-gray-500">

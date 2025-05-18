@@ -30,17 +30,17 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto my-10 max-w-[600px] rounded-lg bg-white p-8 shadow-lg">
-            <Section className="text-center">
+            <Section style={{ background: 'linear-gradient(90deg, #2563eb 0%, #60a5fa 100%)', borderRadius: 12, padding: '24px 0 12px 0', marginBottom: 24 }}>
               <Img
                 src="https://sport-store.vercel.app/vju-logo-main.png"
                 width="160"
                 height="auto"
                 alt="Sport Store Logo"
-                className="mx-auto mb-6"
+                className="mx-auto mb-2"
               />
-              <Heading className="text-2xl font-bold text-gray-900">
-                Yêu cầu đặt lại mật khẩu
-              </Heading>
+              <Heading style={{ color: '#fff', fontWeight: 700, fontSize: 26, margin: 0 }}>Yêu cầu đặt lại mật khẩu</Heading>
+            </Section>
+            <Section className="text-center">
               <Text className="text-gray-600">
                 Xin chào <Text style={{ fontWeight: 'bold', display: 'inline' }}>{name}</Text>,
               </Text>
@@ -51,17 +51,19 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
 
             <Section className="mt-8 text-center">
               <Section style={{
-                borderRadius: '8px',
+                borderRadius: 10,
                 background: '#f3f4f6',
-                padding: '16px 0',
-                fontSize: '24px',
+                padding: '18px 0',
+                fontSize: 28,
                 fontWeight: 'bold',
-                letterSpacing: '4px',
+                letterSpacing: 6,
                 display: 'inline-block',
                 width: 'auto',
-                margin: '0 auto'
+                margin: '0 auto',
+                border: '2px solid #2563eb',
+                boxShadow: '0 2px 8px 0 #2563eb22'
               }}>
-                <Text style={{ fontSize: 24, fontWeight: 'bold', letterSpacing: 4 }}>{otp}</Text>
+                <Text style={{ fontSize: 28, fontWeight: 'bold', letterSpacing: 6, color: '#2563eb' }}>{otp}</Text>
               </Section>
               <Text className="mt-4 text-sm text-gray-600">
                 Mã này sẽ hết hạn sau 10 phút.
@@ -80,7 +82,7 @@ const ForgotPasswordEmail: React.FC<ForgotPasswordEmailProps> = ({
               </Text>
             </Section>
 
-            <Hr className="my-8 border-gray-200" />
+            <Hr style={{ borderTop: '1.5px solid #e5e7eb', margin: '32px 0 16px 0' }} />
 
             <Section className="text-center">
               <Text className="text-xs text-gray-500">
