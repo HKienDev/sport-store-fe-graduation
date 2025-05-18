@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:email-templates": "tsc --project src/email-templates/tsconfig.email.json && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",

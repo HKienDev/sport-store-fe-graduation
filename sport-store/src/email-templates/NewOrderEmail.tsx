@@ -15,68 +15,49 @@ import {
 } from '@react-email/components';
 import { Tailwind } from '@react-email/tailwind';
 import * as React from 'react';
-import { formatCurrency } from '@/lib/utils';
 
-interface OrderItem {
-  product: {
-    name: string;
-    price: number;
-    image: string;
-  };
+interface NewOrderEmailProduct {
+  name: string;
+  price: string; // đã format
+  image: string;
   quantity: number;
 }
 
-interface Order {
-  _id: string;
-  shortId: string;
-  user: {
-    name: string;
-    email: string;
-  };
-  items: OrderItem[];
-  subtotal: number;
-  directDiscount: number;
-  couponDiscount: number;
-  shippingFee: number;
-  totalPrice: number;
-  shippingAddress: {
-    fullName: string;
-    phone: string;
-    address: {
-      street: string;
-      ward: {
-        name: string;
-      };
-      district: {
-        name: string;
-      };
-      province: {
-        name: string;
-      };
-    };
-  };
-  shippingMethod: {
-    method: string;
-    fee: number;
-  };
-  paymentMethod: string;
-  paymentStatus: 'pending' | 'paid' | 'failed';
-  createdAt: string;
-}
-
 interface NewOrderEmailProps {
-  order: Order;
+  shortId: string;
+  fullName: string;
+  createdAt: string; // đã format
+  deliveryDate: string; // đã format
+  items: NewOrderEmailProduct[];
+  subtotal: string;
+  directDiscount: string;
+  couponDiscount: string;
+  shippingFee: string;
+  totalPrice: string;
+  shippingAddress: string;
+  paymentMethod: string;
+  paymentStatus: string;
 }
 
-const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
-  // Tính thời gian dự kiến giao hàng (3-5 ngày từ ngày đặt hàng)
-  const deliveryDate = new Date(order.createdAt);
-  deliveryDate.setDate(deliveryDate.getDate() + 4); // Mặc định 4 ngày
-
+const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
+  shortId,
+  fullName,
+  createdAt,
+  deliveryDate,
+  items,
+  subtotal,
+  directDiscount,
+  couponDiscount,
+  shippingFee,
+  totalPrice,
+  shippingAddress,
+  paymentMethod,
+  paymentStatus,
+}) => {
   return (
     <Html>
       <Head />
-      <Preview>Xác nhận đơn hàng #{order.shortId} từ Sport Store</Preview>
+      <Preview>Xác nhận đơn hàng #{shortId} từ Sport Store</Preview>
       <Tailwind>
         <Body className="bg-gray-100 font-sans">
           <Container className="mx-auto my-10 max-w-[650px] rounded-lg bg-white p-8 shadow-lg">
@@ -89,7 +70,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                 className="mx-auto mb-7"
               />
               <Heading className="text-2xl font-bold text-gray-900">
-                Xin chào {order.shippingAddress.fullName}!
+                Xin chào {fullName}!
               </Heading>
               <Text className="text-gray-600">
                 Cảm ơn bạn đã đặt hàng tại{' '}
@@ -107,7 +88,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                     Mã đơn hàng
                   </Text>
                   <Text className="text-lg font-semibold text-blue-800">
-                    #{order.shortId}
+                    #{shortId}
                   </Text>
                 </Column>
                 <Column>
@@ -115,7 +96,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                     Ngày đặt hàng
                   </Text>
                   <Text className="text-lg font-medium text-blue-800">
-                    {new Date(order.createdAt).toLocaleDateString('vi-VN')}
+                    {createdAt}
                   </Text>
                 </Column>
                 <Column>
@@ -123,7 +104,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                     Dự kiến giao
                   </Text>
                   <Text className="text-lg font-medium text-blue-800">
-                    {deliveryDate.toLocaleDateString('vi-VN')}
+                    {deliveryDate}
                   </Text>
                 </Column>
               </Row>
@@ -151,7 +132,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {order.items.map((item, index) => (
+                    {items.map((item, index) => (
                       <tr
                         key={index}
                         className="border-b border-gray-200 transition-colors hover:bg-gray-50"
@@ -160,17 +141,17 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                           <div className="flex items-start gap-4">
                             <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100">
                               <Img
-                                src={item.product.image}
-                                alt={item.product.name}
+                                src={item.image}
+                                alt={item.name}
                                 className="h-full w-full object-cover"
                               />
                             </div>
                             <div>
                               <Text className="font-semibold text-gray-900">
-                                {item.product.name}
+                                {item.name}
                               </Text>
                               <Text className="mt-1 text-sm text-gray-500">
-                                {formatCurrency(item.product.price)} / sản phẩm
+                                {item.price} / sản phẩm
                               </Text>
                             </div>
                           </div>
@@ -179,7 +160,7 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                           {item.quantity}
                         </td>
                         <td className="p-4 text-right font-semibold text-gray-900">
-                          {formatCurrency(item.product.price * item.quantity)}
+                          {item.price}
                         </td>
                       </tr>
                     ))}
@@ -195,54 +176,47 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
                 </Column>
                 <Column align="right">
                   <Text className="text-sm font-medium text-gray-900">
-                    {formatCurrency(order.subtotal)}
+                    {subtotal}
                   </Text>
                 </Column>
               </Row>
-              {order.directDiscount > 0 && (
-                <Row className="mt-2">
-                  <Column>
-                    <Text className="text-sm text-gray-600">Giảm giá:</Text>
-                  </Column>
-                  <Column align="right">
-                    <Text className="text-sm font-medium text-green-600">
-                      -{formatCurrency(order.directDiscount)}
-                    </Text>
-                  </Column>
-                </Row>
-              )}
-              {order.couponDiscount > 0 && (
-                <Row className="mt-2">
-                  <Column>
-                    <Text className="text-sm text-gray-600">Mã giảm giá:</Text>
-                  </Column>
-                  <Column align="right">
-                    <Text className="text-sm font-medium text-green-600">
-                      -{formatCurrency(order.couponDiscount)}
-                    </Text>
-                  </Column>
-                </Row>
-              )}
-              <Row className="mt-2">
+              <Row>
+                <Column>
+                  <Text className="text-sm text-gray-600">Giảm giá trực tiếp:</Text>
+                </Column>
+                <Column align="right">
+                  <Text className="text-sm font-medium text-red-600">
+                    -{directDiscount}
+                  </Text>
+                </Column>
+              </Row>
+              <Row>
+                <Column>
+                  <Text className="text-sm text-gray-600">Mã giảm giá:</Text>
+                </Column>
+                <Column align="right">
+                  <Text className="text-sm font-medium text-red-600">
+                    -{couponDiscount}
+                  </Text>
+                </Column>
+              </Row>
+              <Row>
                 <Column>
                   <Text className="text-sm text-gray-600">Phí vận chuyển:</Text>
                 </Column>
                 <Column align="right">
                   <Text className="text-sm font-medium text-gray-900">
-                    {formatCurrency(order.shippingFee)}
+                    {shippingFee}
                   </Text>
                 </Column>
               </Row>
-              <Hr style={hr} />
-              <Row className="mt-2">
+              <Row>
                 <Column>
-                  <Text className="text-base font-bold text-gray-900">
-                    Tổng thanh toán:
-                  </Text>
+                  <Text className="text-base font-bold text-gray-900">Tổng thanh toán:</Text>
                 </Column>
                 <Column align="right">
-                  <Text className="text-base font-bold text-blue-600">
-                    {formatCurrency(order.totalPrice)}
+                  <Text className="text-lg font-bold text-blue-600">
+                    {totalPrice}
                   </Text>
                 </Column>
               </Row>
@@ -251,38 +225,29 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({ order }) => {
             <Hr style={hr} />
 
             <Section className="mt-8">
-              <Heading className="mb-6 border-l-4 border-green-500 pl-3 text-lg font-bold text-gray-900">
+              <Heading className="mb-4 text-lg font-semibold text-gray-900">
                 Thông tin giao hàng
               </Heading>
-              <div className="rounded-lg bg-gray-50 p-5">
-                <Text className="font-medium text-gray-900 leading-relaxed">
-                  <span className="font-semibold">Người nhận:</span> {order.shippingAddress.fullName}
-                  <br />
-                  <span className="font-semibold">Số điện thoại:</span> {order.shippingAddress.phone}
-                  <br />
-                  <span className="font-semibold">Địa chỉ:</span> {order.shippingAddress.address.street}, {order.shippingAddress.address.ward.name}, {order.shippingAddress.address.district.name}, {order.shippingAddress.address.province.name}
-                  <br />
-                  <span className="font-semibold">Phương thức vận chuyển:</span> {order.shippingMethod.method === 'standard' ? 'Tiêu chuẩn' : order.shippingMethod.method === 'express' ? 'Nhanh' : 'Hôm nay'}
-                </Text>
-              </div>
+              <Text className="text-gray-700">
+                {shippingAddress}
+              </Text>
             </Section>
 
             <Section className="mt-8">
-              <Heading className="mb-6 border-l-4 border-purple-500 pl-3 text-lg font-bold text-gray-900">
+              <Heading className="mb-4 text-lg font-semibold text-gray-900">
                 Phương thức thanh toán
               </Heading>
-              <div className="rounded-lg bg-gray-50 p-5">
-                <Text className="font-medium text-gray-900 leading-relaxed">
-                  <span className="font-semibold">Phương thức:</span> {order.paymentMethod === 'COD' ? 'Thanh toán khi nhận hàng (COD)' : 'Thanh toán qua Stripe'}
-                  <br />
-                  <span className="font-semibold">Trạng thái:</span> {order.paymentStatus === 'pending' ? 'Chờ thanh toán' : order.paymentStatus === 'paid' ? 'Đã thanh toán' : 'Thanh toán thất bại'}
-                </Text>
-              </div>
+              <Text className="text-gray-700">
+                {paymentMethod}
+              </Text>
+              <Text className="text-gray-700">
+                Trạng thái: {paymentStatus}
+              </Text>
             </Section>
 
             <Section className="mt-8 text-center">
               <Link
-                href={`https://sport-store.vercel.app/orders/${order._id}`}
+                href={`https://sport-store.vercel.app/orders/${shortId}`}
                 className="inline-block rounded-full bg-blue-600 px-8 py-3 text-white shadow-lg transition-colors hover:bg-blue-700"
               >
                 Xem chi tiết đơn hàng
