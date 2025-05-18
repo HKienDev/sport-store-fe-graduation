@@ -196,14 +196,21 @@ const NewOrderEmail: React.FC<NewOrderEmailProps> = ({
 export default NewOrderEmail;
 
 // Style constants
-const orderInfoLabel = { color: '#2563eb', fontWeight: 600, fontSize: 13, padding: '4px 8px', textTransform: 'uppercase', letterSpacing: 0.5 };
+const orderInfoLabel = {
+  color: '#2563eb',
+  fontWeight: 600,
+  fontSize: 13,
+  padding: '4px 8px',
+  textTransform: 'uppercase' as const,
+  letterSpacing: '0.5px'
+};
 const orderInfoValue = { color: '#222', fontWeight: 700, fontSize: 15, padding: '4px 8px' };
-const productTable = { width: '100%', borderCollapse: 'collapse', background: '#fff', borderRadius: 8, overflow: 'hidden', marginBottom: 8 };
-const thStyle = { background: '#f1f5f9', color: '#2563eb', fontWeight: 700, fontSize: 13, padding: '10px 8px', borderBottom: '2px solid #e5e7eb', textAlign: 'left' };
+const productTable = { width: '100%', borderCollapse: 'collapse' as const, background: '#fff', borderRadius: 8, overflow: 'hidden', marginBottom: 8 };
+const thStyle = { background: '#f1f5f9', color: '#2563eb', fontWeight: 700, fontSize: 13, padding: '10px 8px', borderBottom: '2px solid #e5e7eb', textAlign: 'left' as const };
 const tdStyle = { padding: '10px 8px', borderBottom: '1px solid #e5e7eb', fontSize: 14, color: '#222', background: '#fff' };
 const rowEven = { background: '#f8fafc' };
 const rowOdd = { background: '#fff' };
 const summaryLabel = { color: '#64748b', fontWeight: 500, fontSize: 14, padding: '6px 0' };
-const summaryValue = { color: '#222', fontWeight: 600, fontSize: 15, textAlign: 'right', padding: '6px 0' };
+const summaryValue = { color: '#222', fontWeight: 600, fontSize: 15, textAlign: 'right' as const, padding: '6px 0' };
 
 export type { NewOrderEmailProps }; 
