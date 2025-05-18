@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "outDir": "../../sport-store-be-graduation/sport-store/src/email-templates",
+    "module": "ESNext",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "target": "ES2017"
+  },
+  "include": ["src/email-templates/*.tsx"]
+} 
