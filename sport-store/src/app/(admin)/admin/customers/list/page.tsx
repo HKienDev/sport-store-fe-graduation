@@ -22,7 +22,7 @@ export default function CustomerList() {
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { user, isAuthenticated, loading: authLoading } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   const fetchCustomers = async () => {
     try {
@@ -47,8 +47,8 @@ export default function CustomerList() {
     fetchCustomers();
   }, []);
 
-  const handleDelete = (id: string) => {
-    setCustomers((prev) => prev.filter((customer) => customer._id !== id));
+  const handleDelete = (customId: string) => {
+    setCustomers((prev) => prev.filter((customer) => customer.customId !== customId && `VJUSPORTUSER-${customer._id.slice(0, 8)}` !== customId));
     toast.success("Xóa khách hàng thành công");
   };
 

@@ -266,10 +266,11 @@ export function CustomerTable({
                             <Eye size={18} />
                           </button>
                           <button
-                            onClick={() => handleDelete(customer._id)}
-                            className="p-1.5 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+                            className="text-red-500 hover:text-red-700 transition-colors"
+                            title="Xóa khách hàng"
+                            onClick={() => handleDelete(customer.customId || `VJUSPORTUSER-${customer._id.slice(0, 8)}`)}
                           >
-                            <Trash2 size={18} />
+                            <Trash2 size={20} />
                           </button>
                         </div>
                       </td>

@@ -1,4 +1,4 @@
-import type { User, Gender, UserRole, MembershipLevel, AuthStatus } from './base';
+import type { Gender, UserRole, MembershipLevel, AuthStatus } from './base';
 
 export interface Customer {
   _id: string;
@@ -19,6 +19,7 @@ export interface Customer {
   role?: string;
   email?: string;
   deliveredOrders?: number;
+  customId?: string;
 }
 
 export interface CustomerResponse {
