@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "build:email-templates": "tsc -p tsconfig.email.json",
-    "build:email-templates-esbuild": "npx esbuild src/email-templates/*.tsx --outdir=be-build-email-templates --bundle --platform=node --format=esm --jsx=automatic --target=node18 --loader:.tsx=tsx --external:react --external:@react-email/components --external:@react-email/tailwind --external:@react-email/head --external:@react-email/html --external:@react-email/body --external:@react-email/heading --external:@react-email/img --external:@react-email/link --external:@react-email/preview --external:@react-email/section --external:@react-email/text && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/ && rm -rf be-build-email-templates"
+    "build:email-templates-esbuild": "npx esbuild src/email-templates/*.tsx --outdir=be-build-email-templates --bundle --platform=node --format=esm --jsx=automatic --target=node18 --loader:.tsx=tsx --external:react --external:@react-email/components --external:@react-email/tailwind --external:@react-email/head --external:@react-email/html --external:@react-email/body --external:@react-email/heading --external:@react-email/img --external:@react-email/link --external:@react-email/preview --external:@react-email/section --external:@react-email/text --inject:./src/email-templates/react-shim.js && cp -f be-build-email-templates/*.js ../../sport-store-be-graduation/sport-store/src/email-templates/ && rm -rf be-build-email-templates"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.2",

@@ -5,6 +5,7 @@ import { ArrowRightIcon, ShieldCheckIcon } from '@heroicons/react/24/outline';
 import type { Coupon } from '@/types/coupon';
 
 interface OrderSummaryProps {
+  originalTotal: number;
   subtotal: number;
   discount: number;
   couponDiscount: number;
@@ -16,6 +17,7 @@ interface OrderSummaryProps {
 }
 
 export default function OrderSummary({
+  originalTotal,
   subtotal,
   discount,
   couponDiscount,
@@ -39,22 +41,23 @@ export default function OrderSummary({
       <div className="p-6 space-y-4">
         <div className="space-y-3">
           <div className="flex justify-between">
+            <span className="text-gray-700">Tổng giá gốc</span>
+            <span className="font-medium">{formatPrice(originalTotal)}</span>
+          </div>
+          <div className="flex justify-between">
             <span className="text-gray-700">Tổng tiền hàng</span>
             <span className="font-medium">{formatPrice(subtotal)}</span>
           </div>
-          
           <div className="flex justify-between">
             <span className="text-gray-700">Giảm giá trực tiếp</span>
             <span className="font-medium text-green-600">-{formatPrice(discount)}</span>
           </div>
-          
           <div className="flex justify-between">
-            <span className="text-gray-700">formatPrice
+            <span className="text-gray-700">
               Mã giảm giá {appliedCoupon ? `(${appliedCoupon.code})` : ''}
             </span>
             <span className="font-medium text-green-600">-{formatPrice(couponDiscount)}</span>
           </div>
-          
           <div className="flex justify-between">
             <span className="text-gray-700">Phí vận chuyển</span>
             <span className="font-medium">{formatPrice(shipping)}</span>

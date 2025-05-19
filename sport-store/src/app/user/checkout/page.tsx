@@ -55,6 +55,7 @@ export default function Checkout() {
   const [createdOrderId, setCreatedOrderId] = useState<string | null>(null);
   const [clientSecret, setClientSecret] = useState<string>('');
   const [amount, setAmount] = useState<number>(0);
+  const [originalTotal, setOriginalTotal] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -91,8 +92,9 @@ export default function Checkout() {
           console.log(`💰 Tổng tiền sau giảm giá: ${totalSalePrice}`);
           console.log(`💰 Tổng giảm giá: ${totalDirectDiscount}`);
           
-          setSubtotal(totalOriginalPrice);
-          setDiscount(totalDirectDiscount);
+          setOriginalTotal(totalOriginalPrice);
+          setSubtotal(totalSalePrice);
+          setDiscount(totalOriginalPrice - totalSalePrice);
           setTotalAfterDiscount(totalSalePrice);
         } else {
           toast.error('Không thể tải thông tin giỏ hàng');
@@ -389,6 +391,7 @@ export default function Checkout() {
             />
 
             <OrderSummary
+              originalTotal={originalTotal}
               subtotal={subtotal}
               discount={discount}
               couponDiscount={couponDiscount}
