@@ -286,7 +286,12 @@ export default function InvoicePage() {
               couponDiscount={order.couponDiscount}
               shipping={order.shippingFee}
               total={order.totalPrice}
-              paid={order.paymentStatus === 'paid' ? order.totalPrice : 0}
+              paid={
+                (order.paymentMethod === PaymentMethod.STRIPE && order.paymentStatus === 'paid') ||
+                (order.paymentMethod === PaymentMethod.COD && order.status === 'delivered')
+                  ? order.totalPrice
+                  : 0
+              }
             />
           </div>
         </div>
