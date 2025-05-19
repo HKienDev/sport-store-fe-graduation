@@ -52,7 +52,9 @@ const OrderStatusTimeline = ({
 
   // Cập nhật ngày cho các trạng thái từ lịch sử
   statusHistory.forEach(history => {
-    const status = statuses.find(s => s.status === history.status);
+    // Đồng bộ trạng thái 'shipping' với 'shipped' trong statusHistory
+    const statusKey = history.status === 'shipped' ? 'shipping' : history.status;
+    const status = statuses.find(s => s.status === statusKey);
     if (status) {
       status.date = new Date(history.updatedAt);
     }

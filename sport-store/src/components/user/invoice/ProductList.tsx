@@ -50,7 +50,7 @@ export default function ProductList({ products, animateItems }: ProductListProps
               <div className="flex-1">
                 <h4 className="font-medium text-gray-900">{product.name}</h4>
                 <div className="mt-1 text-sm text-gray-500">
-                  {product.categoryName} • {product.color || 'Mặc định'} • Kích cỡ: {product.size}
+                  {product.color || 'Mặc định'} • Kích cỡ: {product.size}
                 </div>
               </div>
               <div className="mt-3 sm:mt-0 flex items-center justify-between sm:flex-col sm:items-end">
