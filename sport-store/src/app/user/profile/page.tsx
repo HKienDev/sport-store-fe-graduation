@@ -15,7 +15,7 @@ function ProfilePageContent() {
   const router = useRouter();
   const { user, loading } = useAuth();
 
-  // Handle scroll effect for the sticky header
+
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
