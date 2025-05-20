@@ -11,7 +11,6 @@ import { Product } from "@/types/product";
 import { getAllProducts } from "@/services/productService";
 import Skeleton from "@/components/common/Skeleton";
 
-// Thêm khai báo cho window.__checkedAuth
 declare global {
   interface Window {
     __checkedAuth?: boolean;
