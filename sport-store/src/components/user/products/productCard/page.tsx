@@ -35,9 +35,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         } else {
           setCategoryName("Không xác định");
         }
-      } catch (error: any) {
+      } catch (error: Error | unknown) {
         // Nếu lỗi là 404 hoặc không tìm thấy, không log lỗi, chỉ set 'Không xác định'
-        if (error?.message?.includes('Failed to fetch category')) {
+        if (error instanceof Error && error.message?.includes('Failed to fetch category')) {
           setCategoryName("Không xác định");
         } else {
           console.error("Lỗi khi lấy thông tin category:", error);
@@ -114,7 +114,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
 
         {/* Container ảnh */}
-        <div className="relative h-[180px] overflow-hidden">
+        <div className="relative w-full aspect-[4/3] overflow-hidden">
           <Image
             src={imageUrl}
             alt={name}
@@ -122,7 +122,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-110"
             priority
-            style={{ width: '100%', height: 180 }}
           />
           {/* Overlay khi hover */}
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300"></div>

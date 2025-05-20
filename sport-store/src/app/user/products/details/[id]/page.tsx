@@ -5,7 +5,6 @@ import { useParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import Breadcrumb from '@/components/user/productDetail/Breadcrumb';
 import ProductGallery from '@/components/user/productDetail/ProductGallery';
-import ProductRating from '@/components/user/productDetail/ProductRating';
 import ProductPrice from '@/components/user/productDetail/ProductPrice';
 import ColorSelector from '@/components/user/productDetail/ColorSelector';
 import SizeSelector from '@/components/user/productDetail/SizeSelector';
@@ -259,8 +258,6 @@ export default function ProductDetail() {
         />
 
         <div>
-          <ProductRating rating={product.rating} numReviews={product.numReviews} />
-
           <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
           
           <ProductPrice originalPrice={product.originalPrice} salePrice={product.salePrice} />

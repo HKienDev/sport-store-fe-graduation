@@ -3,12 +3,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowRight, ShoppingBag, Users, Award } from "lucide-react";
 import Chat from "@/components/common/chat/userChat";
 import ProductCard from "@/components/user/products/productCard/page";
 import { useAuth } from "@/context/authContext";
 import { Product } from "@/types/product";
-import { getAllProducts, getProductsByCategory } from "@/services/productService";
+import { getProductsByCategory } from "@/services/productService";
 import Skeleton from "@/components/common/Skeleton";
 import { Category } from "@/types/category";
 
@@ -21,9 +22,8 @@ declare global {
 
 const HomePage = () => {
   const router = useRouter();
-  const [products, setProducts] = useState<Product[]>([]);
+  const [productsByCategory, setProductsByCategory] = useState<{ [key: string]: Product[] }>({});
   const [categories, setCategories] = useState<Category[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, checkAuthStatus } = useAuth();
@@ -67,30 +67,33 @@ const HomePage = () => {
   }, []);
 
   useEffect(() => {
-    // Fetch products based on selected category
-    const fetchData = async () => {
+    // Fetch products for each category
+    const fetchProductsByCategory = async () => {
       try {
         setLoading(true);
-        let response;
-        if (selectedCategory) {
-          response = await getProductsByCategory(selectedCategory);
-        } else {
-          response = await getAllProducts();
+        const productsByCategoryMap: { [key: string]: Product[] } = {};
+        
+        // Fetch products for each category
+        for (const category of categories) {
+          const response = await getProductsByCategory(category._id);
+          if (response.success) {
+            productsByCategoryMap[category._id] = response.data.products || [];
+          }
         }
         
-        if (!response.success) {
-          throw new Error("Lỗi khi lấy dữ liệu");
-        }
-        setProducts(response.data.products);
+        setProductsByCategory(productsByCategoryMap);
       } catch (err) {
+        console.error("Error fetching products by category:", err);
         setError("Đã xảy ra lỗi khi tải dữ liệu");
-        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
-    fetchData();
-  }, [selectedCategory]);
+
+    if (categories.length > 0) {
+      fetchProductsByCategory();
+    }
+  }, [categories]);
 
   if (loading) return (
     <div className="min-h-screen bg-white">
@@ -119,7 +122,7 @@ const HomePage = () => {
 
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
-  console.log("Current Products State:", products);
+  console.log("Current Products State:", productsByCategory);
 
   return (
     <div className="min-h-screen bg-white">
@@ -292,42 +295,44 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Danh sách sản phẩm */}
+      {/* Products by Category Section */}
       <div className="container mx-auto px-4 py-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-          <h1 className="text-3xl font-bold">Sản phẩm mới nhất</h1>
-          
-          {/* Category Filter */}
-          <div className="relative w-full md:w-64">
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="block w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm appearance-none transition-all duration-200 cursor-pointer"
-            >
-              <option value="">Tất cả danh mục</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
-              <svg className="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
+        {categories.map((category) => (
+          <div key={category._id} className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-2xl font-bold text-gray-900">{category.name}</h2>
+              <Link
+                href={`/categories/${category.slug}`}
+                className="text-blue-600 hover:text-blue-800 flex items-center gap-2"
+              >
+                Xem tất cả
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-          </div>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {products && products.length > 0 ? (
-            products.map((product) => (
-              <ProductCard key={product._id} product={product} />
-            ))
-          ) : (
-            <p className="col-span-full text-center text-gray-500">Không có sản phẩm nào</p>
-          )}
-        </div>
+            {loading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {[...Array(4)].map((_, index) => (
+                  <div key={index} className="animate-pulse">
+                    <div className="bg-gray-200 rounded-lg h-48 mb-4"></div>
+                    <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-1/2"></div>
+                  </div>
+                ))}
+              </div>
+            ) : error ? (
+              <p className="text-red-500 text-center">{error}</p>
+            ) : productsByCategory[category._id]?.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {productsByCategory[category._id].map((product) => (
+                  <ProductCard key={product._id} product={product} />
+                ))}
+              </div>
+            ) : (
+              <p className="text-center text-gray-500">Không có sản phẩm nào trong danh mục này</p>
+            )}
+          </div>
+        ))}
       </div>
 
       <Chat />
