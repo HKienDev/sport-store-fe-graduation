@@ -8,8 +8,9 @@ import Chat from "@/components/common/chat/userChat";
 import ProductCard from "@/components/user/products/productCard/page";
 import { useAuth } from "@/context/authContext";
 import { Product } from "@/types/product";
-import { getAllProducts } from "@/services/productService";
+import { getAllProducts, getProductsByCategory } from "@/services/productService";
 import Skeleton from "@/components/common/Skeleton";
+import { Category } from "@/types/category";
 
 // Thêm khai báo cho window.__checkedAuth
 declare global {
@@ -21,6 +22,8 @@ declare global {
 const HomePage = () => {
   const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { user, checkAuthStatus } = useAuth();
@@ -44,15 +47,42 @@ const HomePage = () => {
   }, [user, router]);
 
   useEffect(() => {
-    // Fetch products
+    // Fetch categories
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('/api/categories');
+        if (!response.ok) {
+          throw new Error("Lỗi khi lấy danh mục");
+        }
+        const data = await response.json();
+        if (data.success) {
+          setCategories(data.data.categories || []);
+        }
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    // Fetch products based on selected category
     const fetchData = async () => {
       try {
-        const response = await getAllProducts();
+        setLoading(true);
+        let response;
+        if (selectedCategory) {
+          response = await getProductsByCategory(selectedCategory);
+        } else {
+          response = await getAllProducts();
+        }
+        
         if (!response.success) {
           throw new Error("Lỗi khi lấy dữ liệu");
         }
         setProducts(response.data.products);
-      } catch {
+      } catch (err) {
         setError("Đã xảy ra lỗi khi tải dữ liệu");
         setProducts([]);
       } finally {
@@ -60,7 +90,7 @@ const HomePage = () => {
       }
     };
     fetchData();
-  }, []);
+  }, [selectedCategory]);
 
   if (loading) return (
     <div className="min-h-screen bg-white">
@@ -264,7 +294,31 @@ const HomePage = () => {
 
       {/* Danh sách sản phẩm */}
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-8">Sản phẩm mới nhất</h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+          <h1 className="text-3xl font-bold">Sản phẩm mới nhất</h1>
+          
+          {/* Category Filter */}
+          <div className="relative w-full md:w-64">
+            <select
+              value={selectedCategory}
+              onChange={(e) => setSelectedCategory(e.target.value)}
+              className="block w-full px-4 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-sm appearance-none transition-all duration-200 cursor-pointer"
+            >
+              <option value="">Tất cả danh mục</option>
+              {categories.map((category) => (
+                <option key={category._id} value={category._id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            <div className="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none">
+              <svg className="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products && products.length > 0 ? (
             products.map((product) => (
