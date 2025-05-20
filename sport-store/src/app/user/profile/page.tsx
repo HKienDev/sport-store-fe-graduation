@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import ProfileUser from "@/components/user/profileUser/userProfileForm";
 import OrderUserPage from "@/components/user/orderUser/orderUserPage";
 import { useSearchParams, useRouter } from 'next/navigation';
-import { API_URL } from '@/utils/api';
 import { useAuth } from '@/context/authContext';
 
 function ProfilePageContent() {
