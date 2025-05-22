@@ -441,15 +441,15 @@ const HomePage = () => {
                 <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 ring-2 ring-purple-200 group-hover:ring-purple-400">
                   <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Liu-bang.jpg"
-                    alt="Hán Cao Tổ"
+                    alt="Hoàng Tiến Trung Kiên"
                     width={56}
                     height={56}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 group-hover:text-purple-600 transition-colors duration-300">Hán Cao Tổ - Lưu Bang</h4>
-                  <p className="text-sm text-gray-500">Nhà Hán</p>
+                  <h4 className="font-bold text-gray-800 group-hover:text-purple-600 transition-colors duration-300">Hoàng Tiến Trung Kiên</h4>
+                  <p className="text-sm text-gray-500">Sinh viên</p>
                 </div>
                 {/* Quote Icon */}
                 <div className="absolute top-0 right-0 text-gray-200 transform -translate-y-1/2 group-hover:text-purple-300 transition-colors duration-300">
@@ -460,7 +460,7 @@ const HomePage = () => {
               </div>
 
               <p className="text-gray-600 leading-relaxed mb-6 relative z-10 group-hover:text-gray-800 transition-colors duration-300">
-                &ldquo;Giàu sang không thể làm hư hỏng, nghèo khó không thể lay chuyển, uy vũ không thể khuất phục, đó mới là bậc đại trượng phu!&rdquo;
+                &ldquo;Mình rất ấn tượng với giao diện của trang web. Mọi thứ được sắp xếp hợp lý, dễ nhìn, tìm đồ cũng nhanh chóng. Mua hàng mà cảm thấy rất thoải mái!&rdquo;
               </p>
 
               <div className="flex items-center justify-between">
@@ -471,7 +471,6 @@ const HomePage = () => {
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 italic">206 TCN - 195 TCN</span>
               </div>
             </div>
 
@@ -483,15 +482,15 @@ const HomePage = () => {
                 <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 ring-2 ring-red-200 group-hover:ring-red-400">
                   <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Song_Taizu.jpg/1200px-Song_Taizu.jpg"
-                    alt="Tống Thái Tổ"
+                    alt="Nguyễn Thị Ánh Viên"
                     width={56}
                     height={56}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">Tống Thái Tổ - Triệu Khuông Dận</h4>
-                  <p className="text-sm text-gray-500">Nhà Tống</p>
+                  <h4 className="font-bold text-gray-800 group-hover:text-red-600 transition-colors duration-300">Nguyễn Thị Ánh Viên</h4>
+                  <p className="text-sm text-gray-500">Vận động viên bơi lội</p>
                 </div>
                 <div className="absolute top-0 right-0 text-gray-200 transform -translate-y-1/2 group-hover:text-red-300 transition-colors duration-300">
                   <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
@@ -501,7 +500,7 @@ const HomePage = () => {
               </div>
 
               <p className="text-gray-600 leading-relaxed mb-6 relative z-10 group-hover:text-gray-800 transition-colors duration-300">
-                &ldquo;Thiên hạ đích tâm, thiên hạ đích huyết!&rdquo;
+                &ldquo;Mình thích phần gợi ý sản phẩm liên quan, giúp mình khám phá thêm nhiều món đồ thể thao hay ho mà trước giờ không để ý tới.&rdquo;
               </p>
 
               <div className="flex items-center justify-between">
@@ -512,7 +511,6 @@ const HomePage = () => {
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 italic">927 - 976</span>
               </div>
             </div>
 
@@ -524,15 +522,15 @@ const HomePage = () => {
                 <div className="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center transform group-hover:scale-110 transition-transform duration-500 ring-2 ring-pink-200 group-hover:ring-pink-400">
                   <Image
                     src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/%E6%98%8E%E5%A4%AA%E7%A5%96%E7%94%BB%E5%83%8F.jpg/250px-%E6%98%8E%E5%A4%AA%E7%A5%96%E7%94%BB%E5%83%8F.jpg"
-                    alt="Minh Thái Tổ"
+                    alt="Nguyễn Quang Hải"
                     width={56}
                     height={56}
                     className="w-full h-full object-cover"
                   />
                 </div>
                 <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">Minh Thái Tổ - Chu Nguyên Chương</h4>
-                  <p className="text-sm text-gray-500">Nhà Minh</p>
+                  <h4 className="font-bold text-gray-800 group-hover:text-pink-600 transition-colors duration-300">Nguyễn Quang Hải</h4>
+                  <p className="text-sm text-gray-500">Cầu thủ bóng đá</p>
                 </div>
                 <div className="absolute top-0 right-0 text-gray-200 transform -translate-y-1/2 group-hover:text-pink-300 transition-colors duration-300">
                   <svg className="w-12 h-12" fill="currentColor" viewBox="0 0 24 24">
@@ -542,7 +540,7 @@ const HomePage = () => {
               </div>
 
               <p className="text-gray-600 leading-relaxed mb-6 relative z-10 group-hover:text-gray-800 transition-colors duration-300">
-                &ldquo;Hoàng đế cai trị thiên hạ, không thể phụ lòng thiên hạ!&rdquo;
+                &ldquo;Sản phẩm được trình bày rõ ràng, hình ảnh sắc nét và thông tin chi tiết đầy đủ. Mình dễ dàng chọn được đôi giày thể thao ưng ý chỉ sau vài phút.&rdquo;
               </p>
 
               <div className="flex items-center justify-between">
@@ -553,7 +551,6 @@ const HomePage = () => {
                     </svg>
                   ))}
                 </div>
-                <span className="text-sm text-gray-500 italic">1328 - 1398</span>
               </div>
             </div>
           </div>
