@@ -34,7 +34,7 @@ VJU Sport Store là nền tảng thương mại điện tử hiện đại dành
 
 ---
 
-## 🛠️ Công nghệ sử dụng
+## Công nghệ sử dụng
 
 - **Next.js** `15.3.1` (App Router, SSR, API routes)
 - **React** `19.1.0` & **React DOM** `19.1.0`
@@ -255,6 +255,6 @@ npm run build && npm start
 
 ---
 
-## 📄 License
+## License
 
 Copyright © HKienDev
