@@ -23,7 +23,7 @@ VJU Sport Store là nền tảng thương mại điện tử hiện đại dành
 
 ---
 
-## 📈 Trạng thái dự án
+## Trạng thái dự án
 
 - **Phiên bản hiện tại:** v1.0.0 (Beta)
 - **Tình trạng:** Đang phát triển, đã hoàn thiện các tính năng chính.
