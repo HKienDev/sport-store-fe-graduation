@@ -4,13 +4,13 @@ VJU Sport Store là nền tảng thương mại điện tử hiện đại dành
 
 ---
 
-## 🚀 Demo & Screenshots
+## Demo & Screenshots
 
 - **Lưu ý**: Dự án từng được deploy lên Vercel để demo nhưng hiện đã hủy. Vui lòng chạy local theo hướng dẫn để trải nghiệm.
 
 ---
 
-## 🌟 Tính năng nổi bật
+## Tính năng nổi bật
 
 - Đăng ký, đăng nhập, xác thực người dùng (NextAuth, Google OAuth)
 - Quản lý sản phẩm, danh mục, khuyến mãi, đơn hàng (Admin)
@@ -64,7 +64,7 @@ VJU Sport Store là nền tảng thương mại điện tử hiện đại dành
 
 ---
 
-## 📦 Cấu trúc thư mục chính
+## Cấu trúc thư mục chính
 
 ```text
 sport-store-fe-graduation/
@@ -164,7 +164,7 @@ sport-store-fe-graduation/
 
 ---
 
-## 🔗 Kết nối với Backend
+## Kết nối với Backend
 
 Dự án frontend này hoạt động cùng với backend tại **[sport-store-be-graduation](https://github.com/HKienDev/sport-store-be-graduation)**.
 
@@ -173,7 +173,7 @@ Dự án frontend này hoạt động cùng với backend tại **[sport-store-b
 
 ---
 
-## ⚡️ Hướng dẫn cài đặt & chạy dự án
+## Hướng dẫn cài đặt & chạy dự án
 
 ### 1. Clone repo:
 
@@ -247,7 +247,7 @@ npm run build && npm start
 
 ---
 
-## 📬 Liên hệ
+## Liên hệ
 
 - **Email:** hoangtientrungkien2k3@gmail.com
 - **Facebook:** [Hoàng Kiên](https://www.facebook.com/ZeussHk3002/)
